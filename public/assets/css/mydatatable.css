@@ -1,0 +1,127 @@
+/* Dark Mode Styles for #mydataTable */
+html[data-theme="dark"] #mydataTable {
+    background-color: #1b2431 !important;
+    color: #fff !important;
+}
+
+html[data-theme="dark"] #mydataTable > thead > tr,
+html[data-theme="dark"] #mydataTable > thead > tr > th {
+    background-color: #1b2431 !important;
+    color: #fff !important;
+    border-color: #444 !important;
+}
+
+html[data-theme="dark"] #mydataTable > tbody > tr,
+html[data-theme="dark"] #mydataTable > tbody > tr > td {
+    background-color: #273142 !important;
+    color: #fff !important;
+    border-color: #444 !important;
+}
+
+html[data-theme="dark"] #mydataTable > tbody > tr:hover {
+    background-color: #555 !important;
+}
+
+
+/* Dark Mode Styles for all .table */
+
+html[data-theme="dark"] .table {
+    background-color: #1b2431 !important;
+    color: #fff !important;
+}
+
+html[data-theme="dark"] .table > thead > tr,
+html[data-theme="dark"] .table > thead > tr > th {
+    background-color: #1b2431 !important;
+    color: #fff !important;
+    border-color: #444 !important;
+}
+
+html[data-theme="dark"] .table > tbody > tr,
+html[data-theme="dark"] .table > tbody > tr > td {
+    background-color: #273142 !important;
+    color: #fff !important;
+    border-color: #444 !important;
+}
+
+/* Striped rows for .table-striped in dark mode */
+html[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #2f3b4a !important;
+}
+
+html[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #273142 !important;
+}
+
+html[data-theme="dark"] .table > tbody > tr:hover {
+    background-color: #555 !important;
+}
+
+/* AdminLTE Select2 Purple Theme */
+/* For the selected items in the multi-select *//* Ensure Select2 Container Takes Full Width */
+.card, .card-body, .m-4 {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box; /* Ensure padding is included in the width calculation */
+    display: block; /* Ensure it behaves as a block element */
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+/* Ensure the Selection Box Takes Full Width */
+.select2-container .select2-selection--single,
+.select2-container .select2-selection--multiple {
+    width: 100% !important;
+    min-width: 100% !important;
+}
+
+/* Apply Purple Theme to Selected Items in Multi-Select */
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #6f42c1 !important; /* Purple background */
+    border: 1px solid #6f42c1 !important; /* Purple border */
+    color: #fff !important; /* White text */
+    border-radius: 0.25rem; /* Rounded corners */
+    padding: 0.25rem 0.5rem; /* Padding inside each tag */
+}
+
+/* Style the Remove Button (X) */
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: rgba(255, 255, 255, 0.7) !important; /* Slightly transparent white for 'X' */
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: #fff !important; /* Full white on hover */
+}
+
+/* Highlighted Option in Dropdown */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #6f42c1 !important; /* Purple background */
+    color: #fff !important; /* White text */
+}
+
+/* Style the Dropdown Arrow */
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #6f42c1 transparent transparent transparent !important; /* Purple arrow */
+}
+
+/* Placeholder and Selected Item Text Color */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #6f42c1 !important; /* Purple text */
+}
+
+/* Single Select with Purple Background */
+.select2-container--default .select2-selection--single.select2-purple .select2-selection__rendered {
+    background-color: #6f42c1 !important; /* Purple background */
+    color: #fff !important; /* White text */
+    padding: 0.375rem 0.75rem !important; /* Padding to match Bootstrap */
+    border-radius: 0.375rem !important; /* Rounded corners */
+}
+
+/* Hover State */
+.select2-container--default .select2-selection--multiple.select2-purple:hover,
+.select2-container--default .select2-selection--single.select2-purple:hover {
+    border-color: #d63384 !important; /* Darker purple on hover */
+    box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25) !important; /* Purple focus shadow */
+}
