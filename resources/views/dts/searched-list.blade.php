@@ -94,7 +94,7 @@
                         <td>{{ $doc->description }}</td>
                         <td> 
                             @if ($doc->fromUser)
-                            {{ $doc->fromUser->name;}}                        
+                            {{ $doc->fromUser->name }}                        
                             @else                           
                            {{ $doc->guest_origin_name }}
                            <br><small>(Guest Acct)</small> 

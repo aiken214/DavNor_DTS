@@ -31,6 +31,8 @@
   <link rel="stylesheet" href="{{ asset('assets/css/lib/slick.css') }}">
   <!-- main css -->
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+  <!-- Modern UI Theme -->
+  <link rel="stylesheet" href="{{ asset('assets/css/modern-theme.css') }}">
 </head>
 <body>
 @if (Auth::check())

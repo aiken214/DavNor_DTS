@@ -31,9 +31,13 @@ class PermissionController extends Controller
       $receivedCount = $docCount ? $docCount->count_received : 0;
       $forwardedCount = $docCount ? $docCount->count_forwarded : 0;           
       $deferredCount = $docCount ? $docCount->count_deferred : 0;
-      $result= DB::table('permissions')->get();
+        $result= DB::table('permissions')->get();
 
-      dd($result);
+        if (view()->exists('admin.permissions.index')) {
+          return view('admin.permissions.index', compact('result', 'docCount', 'guestdocCount', 'incomingCount', 'receivedCount', 'forwardedCount', 'deferredCount'));
+        }
+
+        return response()->json($result);
     
     }
 
