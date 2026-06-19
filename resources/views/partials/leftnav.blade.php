@@ -159,8 +159,13 @@
       <li>
         <a href="{{ route('admin.roles.index') }}"><i class="ri-circle-fill circle-icon text-info-main w-auto"></i> User Roles</a>
       </li>
-      @endcan   
-      
+      @endcan
+      @can('permission_access')
+      <li>
+        <a href="{{ route('admin.permissions.index') }}"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i> Permissions</a>
+      </li>
+      @endcan
+
     </ul>
   </li>
   @endcan

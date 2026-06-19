@@ -27,7 +27,6 @@ class IncomingDocController extends Controller
         abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $tableTitle = "Incoming Document (forwarded in the system but not yet received)";
         $systemSetting =DtsSystemSetting::first();
-        $tableTitle="Guest Documents for receipt";
         $mySection = NULL;
         $assignedSection=DtsSection::where('id', Auth::user()->section_id)->first();
         if ($assignedSection) {
@@ -50,6 +49,7 @@ class IncomingDocController extends Controller
 
     public function acceptDoc(Request $request)
     {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         // Validate the request data
         $validated = $request->validate([
             'doc_route_id' => 'required|numeric|exists:dts_doc_routes,id',
@@ -83,7 +83,7 @@ class IncomingDocController extends Controller
     
     public function acceptAndFileDoc(Request $request)
     {
-
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
          // Validate the request data
          $validated = $request->validate([
             'doc_route_id' => 'required|numeric|exists:dts_doc_routes,id',

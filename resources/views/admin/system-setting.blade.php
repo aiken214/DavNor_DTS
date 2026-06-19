@@ -56,7 +56,7 @@
           </div>
         @endif
 
-        <table id="systemSetting" class="table bordered-table">
+        <table id="systemSetting" class="table table-striped">
             <thead>
                 <tr>
                   <th scope="col-sm">Setting</th>

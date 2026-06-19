@@ -40,8 +40,8 @@ Route::get('/', function () {
 // })->name('login');
 
 Route::get('/guest-dts', [GuestDtsController::class, 'createGuestDocument'])->name('guest-dts');
-Route::get('/user-by-section/{sectionId}', [GuestDtsController::class, 'getUserBySecId']);
-Route::post('/save-document', [GuestDtsController::class, 'storeGuestDocument'])->name('guest-document-store');
+Route::get('/user-by-section/{sectionId}', [GuestDtsController::class, 'getUserBySecId'])->middleware('throttle:30,1');
+Route::post('/save-document', [GuestDtsController::class, 'storeGuestDocument'])->name('guest-document-store')->middleware('throttle:10,1');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [MydashboardController::class, 'index'])->name('dashboard');
@@ -58,11 +58,16 @@ Route::middleware('auth')->group(function () {
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function(){
     Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
-    Route::get('/permissions/{permission}/edit', [PermissionController::class, 'edit'])->name('permissions.edit');
-   
+    Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
+    Route::post('/permissions/update', [PermissionController::class, 'update'])->name('permissions.update');
+    Route::post('/permissions/delete', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
-    Route::get('/roles-edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
-    Route::post('/roles-store', [RoleController::class, 'store'])->name('roles.store');
+    Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+    Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+    Route::get('/roles/{id}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+    Route::patch('/roles/{id}', [RoleController::class, 'update'])->name('roles.update');
+    Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
     Route::get('users-create', [UserController::class, 'create'])->name('users.create');
     Route::get('users', [UserController::class, 'index'])->name('users.index');  
     Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');   

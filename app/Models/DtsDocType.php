@@ -12,5 +12,10 @@ class DtsDocType extends Model
 {
     use HasFactory;
     use SoftDeletes;
-   
+
+    protected $fillable = [
+        'description',
+        'for_guest',
+        'menu_sequence',
+    ];
 }

@@ -31,8 +31,7 @@
                     @endif
                 </ul>
             </div>
-            
-            <!-- Form to submit the selected section_id -->
+
             <form id="section-form" method="POST" action="{{ route('user.updateStation') }}" style="display: none;">
                 @csrf
                 <input type="hidden" name="station_id" id="station-id">
@@ -44,17 +43,26 @@
 
 <div class="card basic-data-table">
     <div class="card-header">
-        <h6>Roles</h6>
+        <div class="row align-items-center">
+            <div class="col-sm-6">
+                <h5 class="card-title mb-0">Roles</h5>
+            </div>
+            <div class="col-sm-6 text-end">
+                @can('role_create')
+                <a href="{{ route('admin.roles.create') }}" class="btn btn-primary">Add Role</a>
+                @endcan
+            </div>
+        </div>
     </div>
-    
+
     <div class="card-body">
-        <table id="dataTable" class="table table-striped table-responsive">
+        <table id="dataTable" class="table table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th style="width:15%;"> Role </th>                    
+                    <th style="width:15%;"> Role </th>
                     <th>Permissions</th>
-                    {{-- <th>Action</th> --}}
+                    <th style="width:15%;">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,9 +75,18 @@
                                 <span class="badge bg-success">{{ $permission->title }}</span>
                             @endforeach
                         </td>
-                        {{-- <td>
-                            <a href="#" class="btn btn-xs btn-info">Edit</a>                           
-                        </td> --}}
+                        <td>
+                            @can('role_edit')
+                            <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-success btn-sm">Edit</a>
+                            @endcan
+                            @can('role_delete')
+                            <form action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this role?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                            @endcan
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -80,18 +97,12 @@
 @endsection
 
 @section('scripts')
-
-
 <script>
     $(document).ready(function() {
-        $('#dataTable').DataTable({         
+        $('#dataTable').DataTable({
             "pageLength": 10,
-            order: [[0, 'asc']] 
-            
+            order: [[0, 'asc']]
         });
     });
-
-   
 </script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endsection

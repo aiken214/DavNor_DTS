@@ -99,16 +99,16 @@
                         <ul class="dropdown-menu">
                           <li><a class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900" href="javascript:void(0)"
                             data-bs-toggle="modal" data-bs-target="#forwardDocModal"
-                            data-dts_document_id='{{ $document->document->id }}'
-                            data-dts_previousroute_id='{{ $document->id }}'
-                            data-doc_description='{{ $document->docType->description }} - {{ $document->document->description }}'
+                            data-dts_document_id="{{ $document->document->id }}"
+                            data-dts_previousroute_id="{{ $document->id }}"
+                            data-doc_description="{{ $document->docType->description }} - {{ $document->document->description }}"
                             >Forward Document</a></li>
-                          
+
                           <li><a class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900" href="javascript:void(0)"
                             data-bs-toggle="modal" data-bs-target="#releaseDocModal"
-                            data-relRouteId="{{ $document->id }}" 
-                            data-relDocId="{{ $document->document->id }}" 
-                            data-relDoc_description='{{ $document->docType->description }} - {{ $document->document->description }}'
+                            data-relRouteId="{{ $document->id }}"
+                            data-relDocId="{{ $document->document->id }}"
+                            data-relDoc_description="{{ $document->docType->description }} - {{ $document->document->description }}"
                             >
                             Release Document</a></li>
                            
@@ -462,7 +462,7 @@ if (forwardDocModal) {
                   },
                   success: function(data) {
                       $.each(data, function(index, user) {
-                          userDropdown.append('<option value="' + user.id + '">' + user.name + '</option>');
+                          userDropdown.append($('<option>').val(user.id).text(user.name));
                       });
                       userDropdown.prop('disabled', false);
                   },

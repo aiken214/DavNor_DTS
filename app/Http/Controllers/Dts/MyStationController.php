@@ -17,9 +17,8 @@ class MyStationController extends Controller
    public function index()
     {
         abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $tableTitle = "Incoming Document (forwarded in the system but not yet received)";
+        $tableTitle = "My Station Documents";
         $systemSetting =DtsSystemSetting::first();
-        $tableTitle="Guest Documents for receipt";
         $mySection = NULL;
         $assignedSection=DtsSection::where('id', Auth::user()->section_id)->first();
         if ($assignedSection) {

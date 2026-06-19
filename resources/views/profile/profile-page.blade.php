@@ -81,7 +81,6 @@
                                         <div class="icon-field">
                                             <span class="icon"><iconify-icon icon="f7:person"></iconify-icon></span>
                                             <input type="text" class="form-control" value="{{ $user->name }}" disabled>
-                                            <input type="hidden" name="name" value="{{ $user->name }}">
                                         </div>
                                     </div>
                                 </div>
@@ -103,7 +102,7 @@
                                         <div class="icon-field">
                                             <span class="icon"><iconify-icon
                                                     icon="icon-park-outline:intersection"></iconify-icon></span>
-                                            <input type="text" class="form-control" value="{{ $user->section->name }}"
+                                            <input type="text" class="form-control" value="{{ $user->section->name ?? 'Not Assigned' }}"
                                                 @readonly(true)>
                                         </div>
                                     </div>

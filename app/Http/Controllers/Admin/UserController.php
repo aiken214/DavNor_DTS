@@ -58,6 +58,7 @@ class UserController extends Controller
      */
     public function create()
     {
+        abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $mySection = NULL;
         $systemSetting =DtsSystemSetting::first();
         $assignedSection=DtsSection::where('id', Auth::user()->section_id)->first();
@@ -80,8 +81,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-       
        $validated= $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -121,7 +122,8 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(User $user)
-    { 
+    {
+        abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $mySection = NULL;
         $systemSetting =DtsSystemSetting::first();
         $assignedSection=DtsSection::where('id', Auth::user()->section_id)->first();
@@ -147,11 +149,14 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'section_id' => 'nullable',
+            'section_id' => 'nullable|exists:dts_sections,id',
+            'roles' => 'nullable|array',
+            'roles.*' => 'nullable|exists:roles,id',
             'sections' => 'nullable|array',
             'sections.*' => 'nullable|exists:dts_sections,id',
         ]);
@@ -182,6 +187,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $user->delete(); // This will perform a soft delete if the User model uses the SoftDeletes trait
 
         return redirect()->route('admin.users.index')->with('success', 'User deleted successfully');

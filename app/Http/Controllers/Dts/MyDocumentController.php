@@ -110,8 +110,11 @@ class MyDocumentController extends Controller
         }
     
         public function myPrintBottomRight($docId){
-           
+
             $document = DtsDocument::findOrFail($docId);
+            if($document->fromuser_id != Auth::user()->id){
+                return abort(403, 'You are not allowed to print this document.');
+            }
             $data = [
                 'document' => $document,
             ];

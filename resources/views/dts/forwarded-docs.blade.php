@@ -291,7 +291,7 @@
                     dataType: 'json',
                     success: function(users) {
                         $.each(users, function(index, user) {
-                            userDropdown.append('<option value="' + user.id + '">' + user.name + '</option>');
+                            userDropdown.append($('<option>').val(user.id).text(user.name));
                         });
                         if (selectedUserId) {
                             userDropdown.val(selectedUserId);

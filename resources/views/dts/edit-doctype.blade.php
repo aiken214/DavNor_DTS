@@ -71,7 +71,6 @@
 
             <div class="row">
                 <div class="col-sm-8">
-                    <form>
                         <div class="row mb-3">
                           <label for="typename" class="col-sm-3 col-form-label">Description</label>
                           <div class="col-sm-9">
@@ -87,7 +86,7 @@
 
                             </select>
 
-                            <input type="hidden" class="form-control" name="id" value={{ $doctype->id }}  required>
+                            <input type="hidden" class="form-control" name="id" value="{{ $doctype->id }}"  required>
                             
                           </div>
                         </div>
@@ -98,7 +97,6 @@
                             <button type="submit" class="btn btn-primary float-end">Save Changes</button>
                           </div>
                         </div>
-                      </form>
 
 
                 </div>

@@ -14,7 +14,7 @@ class DtsDocRoute extends Model
         'dts_document_id', 'previous_route_id', 'from_user_id', 'from_section_id',
         'for_section_id', 'for_user_id', 'receiver_user_id', 'actions_taken',
         'actedby_user_id', 'date_forwarded', 'date_accepted', 'date_acted', 'status_id', 'route_purpose',
-        'io_type', 'fwd_io_type','end_remarks', 'deffered_reason', 'deffered_date', 'defer_until', 'out_released_to', 
+        'io_type', 'fwd_io_type','end_remarks', 'deferred_reason', 'deferred_date', 'defer_until', 'out_released_to',
         'logbook_page', 'del_reason','autoaction_date'
         
 

@@ -116,12 +116,6 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-        $('#users-table').DataTable();
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
         $('#dataTable').DataTable({
             responsive: true,
             "pageLength": 25,

@@ -203,7 +203,7 @@
                     },
                     success: function(data) {
                         $.each(data, function(index, user) {
-                            userDropdown.append('<option value="' + user.id + '">' + user.name + '</option>');
+                            userDropdown.append($('<option>').val(user.id).text(user.name));
                         });
                         userDropdown.prop('disabled', false);
                     },

@@ -89,21 +89,21 @@
                         <div class="btn-group radius-13 font-xs" role="group" aria-label="Default button group">
                         <button type="button" class="btn btn-primary-600 px-8 py-8 text-xs radius-13"
                         data-bs-toggle="modal" data-bs-target="#forwardDocModal"
-                            data-dts_document_id='{{ $docRoute->document->id }}'
-                            data-dts_previousroute_id='{{ $docRoute->id }}'
-                            data-doc_description='{{ $docRoute->docType->description }} - {{ $docRoute->document->description }}'
+                            data-dts_document_id="{{ $docRoute->document->id }}"
+                            data-dts_previousroute_id="{{ $docRoute->id }}"
+                            data-doc_description="{{ $docRoute->docType->description }} - {{ $docRoute->document->description }}"
                         >Fwd</button>
                         <button type="button" class="btn btn-success-600 px-8 py-8 text-xs"
                         data-bs-toggle="modal" data-bs-target="#fileKeptDocModal"
-                        data-routeId="{{ $docRoute->id }}" 
-                        data-docId="{{ $docRoute->document->id }}" 
-                        data-doc_description='{{ $docRoute->docType->description }} - {{ $docRoute->document->description }}'       
+                        data-routeId="{{ $docRoute->id }}"
+                        data-docId="{{ $docRoute->document->id }}"
+                        data-doc_description="{{ $docRoute->docType->description }} - {{ $docRoute->document->description }}"
                         >File</button>
                         <button type="button" class="btn btn-danger-500 px-8 py-8 text-xs radius-13"
                         data-bs-toggle="modal" data-bs-target="#releaseDocModal"
-                        data-relRouteId="{{ $docRoute->id }}" 
-                        data-relDocId="{{ $docRoute->document->id }}" 
-                        data-relDoc_description='{{ $docRoute->docType->description }} - {{ $docRoute->document->description }}'
+                        data-relRouteId="{{ $docRoute->id }}"
+                        data-relDocId="{{ $docRoute->document->id }}"
+                        data-relDoc_description="{{ $docRoute->docType->description }} - {{ $docRoute->document->description }}"
                         >Rel</button>
                         </div>
                     </td>
@@ -349,7 +349,7 @@
                     },
                     success: function(data) {
                         $.each(data, function(index, user) {
-                            userDropdown.append('<option value="' + user.id + '">' + user.name + '</option>');
+                            userDropdown.append($('<option>').val(user.id).text(user.name));
                         });
                         userDropdown.prop('disabled', false);
                     },

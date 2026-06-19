@@ -19,6 +19,7 @@ class ForwardedDocController extends Controller
      */
     public function index()
     {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $tableTitle="Forwarded Documents to other sections";   
         $systemSetting =DtsSystemSetting::first();
         $mySection = NULL;
@@ -49,6 +50,7 @@ class ForwardedDocController extends Controller
     
 public function updateForwardedDoc(Request $request)
 {
+    abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
     // Validate the request
     $validatedData = $request->validate([
         'route_id' => 'required|exists:dts_doc_routes,id',
@@ -72,6 +74,7 @@ public function updateForwardedDoc(Request $request)
 
 public function cancelForwardedDoc(Request $request)
     {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $validatedData = $request->validate([
             'route_id' => 'required|exists:dts_doc_routes,id',
             'del_reason' => 'required|string',
@@ -109,6 +112,7 @@ public function cancelForwardedDoc(Request $request)
     // GET ME HERE ALL THE TRASHED DOCUMENTS
     public function trashedDocs()
     {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $tableTitle="Trashed Documents";   
         $systemSetting =DtsSystemSetting::first();
         $mySection = NULL;
@@ -120,9 +124,9 @@ public function cancelForwardedDoc(Request $request)
                        ->where('user_id', Auth::user()->id)
                        ->orderBy('name','asc')
                        ->get();             
-         $documents = DtsDocRoute::with(['document', 'fromSection', 'fromUser'])
+         $documents = DtsDocRoute::onlyTrashed()
+            ->with(['document', 'fromSection', 'fromUser'])
             ->where('from_section_id', Auth::user()->section_id)
-            ->whereNotNull('deleted_at')
             ->orderBy('id', 'desc')
             ->get();
        return view("dts.trashed-docs", compact('tableTitle', 'documents','mySection', 'myAllSections', 'systemSetting'));
@@ -131,6 +135,7 @@ public function cancelForwardedDoc(Request $request)
     //RESTORE TRASHED DOCUMENT if route_id is not duplicate with prev_route_id column
     public function restoreTrashedDoc(Request $request)
     {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         // Validate the request
         $request->validate([
             'route_id' => 'required|exists:dts_doc_routes,id',

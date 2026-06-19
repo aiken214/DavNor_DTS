@@ -779,7 +779,7 @@
 
 @endsection
 
-@section('sytle')
+@section('styles')
 <style>
     .manual-toc {
         max-height: calc(100vh - 200px);

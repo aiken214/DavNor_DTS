@@ -42,7 +42,7 @@
     </ul>
 </div>
 
-<div class="card">
+<div class="card basic-data-table">
     <div class="card-header">
         <div class="row align-items-center">
             <div class="col-sm-6">
@@ -55,7 +55,7 @@
        
     </div>
     <div class="card-body">
-        <table id="sections-table" class="table table-striped table-bordered">
+        <table id="sections-table" class="table table-striped">
             <thead>
                 <tr>
                     <th>Name</th>    
@@ -84,10 +84,10 @@
                             data-has-create-docform="{{ $section->has_create_docform }}">
                             Edit</button>
 
-                            <form method="POST" action="{{ route('admin.sections.destroy') }}" class="d-inline">
+                            <form method="POST" action="{{ route('admin.sections.destroy') }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this section?')">
                                 @csrf
                                 <input type="hidden" name="section_id" value="{{ $section->id }}" hidden>
-                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete {{ $section->name }} section?')">Delete</button>
+                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
                         </td>
                     </tr>
