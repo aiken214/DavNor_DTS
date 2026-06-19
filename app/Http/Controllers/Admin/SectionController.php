@@ -19,7 +19,8 @@ class SectionController extends Controller
      * Display a listing of the sections.
      */
     public function index()
-    {   
+    {
+        abort_if(Gate::denies('dts_section_acces'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $mySection = NULL;
         $systemSetting =DtsSystemSetting::first();
         $assignedSection=DtsSection::where('id', Auth::user()->section_id)->first();
@@ -37,6 +38,7 @@ class SectionController extends Controller
 
     public function create()
     {
+        abort_if(Gate::denies('dts_section_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $sectionCategories = DtsSectionCategory::all();
         $users= User::select('id','name')->get();
         return view('admin.sections.create', compact('sectionCategories', 'users'));
@@ -47,6 +49,7 @@ class SectionController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(Gate::denies('dts_section_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $request->validate([
             'name' => 'required|string|max:255|unique:dts_sections',
             'is_record_management' => 'required|boolean',
@@ -56,7 +59,7 @@ class SectionController extends Controller
 
        // dd($request->all());
 
-        $createdsection = DtsSection::create($request->all());
+        $createdsection = DtsSection::create($request->only(['name', 'is_record_management', 'is_public_dropdown']));
         if($createdsection){
                 return redirect()->route('admin.sections.index')->with('success', 'Section created successfully');
             }else{
@@ -79,6 +82,7 @@ class SectionController extends Controller
      */
     public function updateSection(Request $request)
     {
+        abort_if(Gate::denies('dts_section_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $request->validate([
             'name' => 'required|string|max:255|unique:dts_sections,name,' . $request->section_id,
             'is_record_management' => 'required|boolean',
@@ -101,6 +105,7 @@ class SectionController extends Controller
      */
     public function destroy(Request $request)
     {
+        abort_if(Gate::denies('dts_section_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $id = $request->section_id;
 
         if($this->hasSectionUser($id)){

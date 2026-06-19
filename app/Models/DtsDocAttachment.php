@@ -11,4 +11,10 @@ class DtsDocAttachment extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'file_at',
+        'has_doctracking',
+        'dts_document_id',
+    ];
 }

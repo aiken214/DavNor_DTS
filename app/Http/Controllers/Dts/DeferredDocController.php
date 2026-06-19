@@ -115,7 +115,8 @@ class DeferredDocController extends Controller
                 ]);
             });
         } catch (\Exception $e) {
-           return redirect()->route('dts.deferred-docs.index')->with('error', 'Failed to forward document: ' . $e->getMessage());
+           \Log::error('Failed to forward document: ' . $e->getMessage());
+           return redirect()->route('dts.deferred-docs.index')->with('error', 'Failed to forward document. Please try again.');
         }
         
        return redirect()->route('dts.deferred-docs.index')->with('success', 'Document is forwarded successfully');

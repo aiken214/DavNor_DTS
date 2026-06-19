@@ -50,7 +50,7 @@ class BatchReleaseController extends Controller
     }
 
     public function releaseDocs(Request $request){
-       
+        abort_if(Gate::denies('dts_batch_release_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $batch = DtsBatchRelease::findOrFail($request->input('batch_release_id'));
         $batch->release_date = date('Y-m-d H:i:s');
         $batch->releaseby_id = Auth::user()->id;

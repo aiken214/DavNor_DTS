@@ -56,7 +56,8 @@ class DtsDocRouteController extends Controller
                 ]);
             });
         } catch (\Exception $e) {
-            return redirect()->route('dts.received-docs')->with('error', 'Failed to forward document: ' . $e->getMessage());
+            \Log::error('Failed to forward document: ' . $e->getMessage());
+            return redirect()->route('dts.received-docs')->with('error', 'Failed to forward document. Please try again.');
         }
         
         return redirect()->route('dts.received-docs')->with('success', 'Document is forwarded successfully');

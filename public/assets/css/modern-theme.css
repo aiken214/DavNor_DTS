@@ -414,31 +414,37 @@ body {
 }
 
 /* DataTable overrides */
-.dataTables_wrapper .dataTables_filter input {
+.dataTables_wrapper .dataTables_filter input,
+div.dt-container .dt-search .dt-input {
   border-radius: 10px !important;
   border: 1.5px solid var(--neutral-200) !important;
   padding: 0.4rem 0.75rem !important;
   font-size: 0.8125rem !important;
+  text-align: left !important;
 }
 
-.dataTables_wrapper .dataTables_length select {
+.dataTables_wrapper .dataTables_length select,
+div.dt-container .dt-length select {
   border-radius: 8px !important;
   border: 1.5px solid var(--neutral-200) !important;
   padding: 0.3rem 0.5rem !important;
 }
 
-.dataTables_wrapper .dataTables_info {
+.dataTables_wrapper .dataTables_info,
+div.dt-container .dt-info {
   font-size: 0.78rem !important;
   color: var(--neutral-500) !important;
 }
 
-.dataTables_wrapper .dataTables_paginate .paginate_button {
+.dataTables_wrapper .dataTables_paginate .paginate_button,
+div.dt-container .dt-paging .dt-paging-button {
   border-radius: 8px !important;
   font-size: 0.8rem !important;
   margin: 0 2px !important;
 }
 
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+div.dt-container .dt-paging .dt-paging-button.current {
   background: linear-gradient(135deg, var(--primary-500), var(--primary-600)) !important;
   color: #fff !important;
   border: none !important;

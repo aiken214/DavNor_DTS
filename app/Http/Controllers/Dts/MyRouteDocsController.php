@@ -50,7 +50,8 @@ class MyRouteDocsController extends Controller
                         ->where('user_id', Auth::user()->id)
                         ->orderBy('name','asc')
                         ->get();
-        $currentUserStationId = Auth::user()->section_id;   
+        $currentUserStationId = Auth::user()->section_id;
+        $sections = DtsSection::orderBy('name', 'asc')->get();
         $documents = DtsDocRoute::with(['document', 'fromSection', 'fromUser'])
         ->where('for_section_id', Auth::user()->section_id)
         ->where('receiver_user_id', Auth::user()->id)

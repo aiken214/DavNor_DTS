@@ -12,19 +12,15 @@
          My Station Dashboard
         </a>
       </li>
+      @if(isset($mySection) && $mySection != NULL)
       <li>-</li>
       <li class="fw-medium">
-          
+        @if(isset($myAllSections) && count($myAllSections) > 1)
         <div class="btn-group dropstart">
             <button class="btn btn-success-600 bg-success-100 border-success-100 text-success-600 hover-text-success not-active px-18 py-11 dropdown-toggle toggle-icon icon-left" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                 @if(isset($mySection) && $mySection != NULL)
                 {{ $mySection }}
-                @elseif(isset($myAllSections) && count($myAllSections) > 0)                        
-                    Select Section
-                @endif
             </button>
             <ul class="dropdown-menu">
-                @if(isset($myAllSections))
                 @foreach($myAllSections as $section)
                     <li>
                         <a class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
@@ -34,17 +30,19 @@
                         </a>
                     </li>
                 @endforeach
-                
             </ul>
         </div>
-        
-        <!-- Form to submit the selected section_id -->
         <form id="section-form" method="POST" action="{{ route('user.updateStation') }}" style="display: none;">
             @csrf
             <input type="hidden" name="station_id" id="station-id">
         </form>
+        @else
+        <span class="btn btn-success-600 bg-success-100 border-success-100 text-success-600 not-active px-18 py-11">
+            {{ $mySection }}
+        </span>
         @endif
-    </li>
+      </li>
+      @endif
     </ul>
   </div>
 
@@ -88,7 +86,7 @@
                         <span class="input-group-text bg-base">
                           <iconify-icon icon="ic:twotone-qrcode"></iconify-icon>
                         </span>
-                        <input type="text" class="form-control flex-grow-1" name="doc_track" autofocus>
+                        <input type="text" class="form-control flex-grow-1" name="doc_track" id="doc_track" autofocus>
                       </div>
                     </form>
                   </div>

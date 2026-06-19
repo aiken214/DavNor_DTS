@@ -50,6 +50,7 @@ class ReceivedDocController extends Controller
 
     public function fileKept(Request $request)
     {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $validated = $request->validate([
             'dts_document_id' => 'required|integer',
             'route_id' => 'required|integer',            
@@ -66,6 +67,7 @@ class ReceivedDocController extends Controller
 
     public function fileReleased(Request $request)
     {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $validated = $request->validate([
             'dts_document_id' => 'required|integer',
             'route_id' => 'required|integer',
@@ -84,6 +86,7 @@ class ReceivedDocController extends Controller
 
     public function deferredDoc(Request $request)
     {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $validated = $request->validate([
             'dts_document_id' => 'required|integer',
             'route_id' => 'required|integer',
@@ -103,6 +106,7 @@ class ReceivedDocController extends Controller
     }
 
     public function forwardDoc(Request $request) {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $documentId = $request->input('dts_document_id');
         $newFromSectionId = $request->input('from_section_id');
         
@@ -138,7 +142,8 @@ class ReceivedDocController extends Controller
                 ]);
             });
         } catch (\Exception $e) {
-            return redirect()->route('dts.received-docs.index')->with('error', 'Failed to forward document: ' . $e->getMessage());
+            \Log::error('Failed to forward document: ' . $e->getMessage());
+            return redirect()->route('dts.received-docs.index')->with('error', 'Failed to forward document. Please try again.');
         }
         
         return redirect()->route('dts.received-docs.index')->with('success', 'Document is forwarded successfully');

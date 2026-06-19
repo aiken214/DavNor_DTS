@@ -19,7 +19,7 @@ class DtsDocument extends Model
         'tracking_issuedby_id',
         'fromuser_id',
         'from_section_id',
-        'guest_name',
+        'guest_origin_name',
         'particulars',
         'mo_yr',
         'issued_num'
@@ -28,14 +28,12 @@ class DtsDocument extends Model
 
     public static function getSystemSettingCode()
     {
-        $setting = DtsSystemSetting::find(1)->select('org_dts_code')->first();
-        return $setting ? $setting->org_dts_code : 'W';
+        return DtsSystemSetting::find(1)?->org_dts_code ?? 'W';
     }
 
     public static function getSystemPadding()
     {
-        $setting = DtsSystemSetting::find(1)->select('number_of_padding')->first();
-        return $setting ? $setting->number_of_padding : 5;
+        return DtsSystemSetting::find(1)?->number_of_padding ?? 5;
     }
 
     public static function generateTrackingCode()
@@ -118,7 +116,7 @@ class DtsDocument extends Model
     # a the receiver of the document is the user who is the receiver of the last route
     public function getReceiverUserAttribute()
     {
-        return $this->getLastRoute()->receiverUser;
+        return $this->getLastRoute()?->receiverUser;
     }
 
 }

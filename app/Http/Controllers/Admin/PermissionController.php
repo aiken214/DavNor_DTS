@@ -4,44 +4,99 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use App\Http\Middleware\AuthGates;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB; 
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use App\Models\Permission;
+use App\Models\DtsSection;
+use App\Models\DtsSystemSetting;
 use Symfony\Component\HttpFoundation\Response;
 
-
-
-
 class PermissionController extends Controller
-
-{ 
-
-    public function index(){
-      abort_if(Gate::denies('permission_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-      // Retrieve the aggregated count data for the user's section
-      $docCount = DB::table('section_document_counts')
-      ->where('section_id', Auth::user()->section_id)
-      ->first(); 
-      $guestdocCount = $docCount ? $docCount->guestdoc_count : 0;
-      $incomingCount = $docCount ? $docCount->count_incomming : 0;
-      $receivedCount = $docCount ? $docCount->count_received : 0;
-      $forwardedCount = $docCount ? $docCount->count_forwarded : 0;           
-      $deferredCount = $docCount ? $docCount->count_deferred : 0;
-        $result= DB::table('permissions')->get();
-
-        if (view()->exists('admin.permissions.index')) {
-          return view('admin.permissions.index', compact('result', 'docCount', 'guestdocCount', 'incomingCount', 'receivedCount', 'forwardedCount', 'deferredCount'));
+{
+    private function getCommonData()
+    {
+        $mySection = null;
+        $systemSetting = DtsSystemSetting::first();
+        $assignedSection = DtsSection::where('id', Auth::user()->section_id)->first();
+        if ($assignedSection) {
+            $mySection = $assignedSection->name;
         }
+        $myAllSections = DB::table('section_user')
+            ->join('dts_sections', 'dts_sections.id', '=', 'section_user.section_id')
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('name', 'asc')
+            ->get();
 
-        return response()->json($result);
-    
+        return compact('mySection', 'myAllSections', 'systemSetting');
     }
 
-    public function edit(){
-        echo "edit";
+    public function index()
+    {
+        abort_if(Gate::denies('permission_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $commonData = $this->getCommonData();
+        $permissions = Permission::with('roles')->orderBy('title')->get();
+
+        return view('admin.permissions.index', array_merge($commonData, compact('permissions')));
+    }
+
+    public function store(Request $request)
+    {
+        abort_if(Gate::denies('permission_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $request->validate([
+            'title' => 'required|string|max:255|unique:permissions,title',
+            'remarks' => 'nullable|string|max:255',
+        ]);
+
+        Permission::create([
+            'title' => $request->title,
+            'group' => $request->group,
+            'remarks' => $request->remarks,
+        ]);
+
+        Cache::forget('gate_permissions');
+
+        return redirect()->route('admin.permissions.index')->with('success', 'Permission created successfully.');
+    }
+
+    public function update(Request $request)
+    {
+        abort_if(Gate::denies('permission_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $request->validate([
+            'permission_id' => 'required|exists:permissions,id',
+            'title' => 'required|string|max:255|unique:permissions,title,' . $request->permission_id,
+            'remarks' => 'nullable|string|max:255',
+        ]);
+
+        $permission = Permission::findOrFail($request->permission_id);
+        $permission->update([
+            'title' => $request->title,
+            'remarks' => $request->remarks,
+        ]);
+
+        Cache::forget('gate_permissions');
+
+        return redirect()->route('admin.permissions.index')->with('success', 'Permission updated successfully.');
+    }
+
+    public function destroy(Request $request)
+    {
+        abort_if(Gate::denies('permission_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $permission = Permission::findOrFail($request->permission_id);
+
+        if ($permission->roles()->count() > 0) {
+            return redirect()->route('admin.permissions.index')->with('error', 'Cannot delete permission. It is assigned to ' . $permission->roles()->count() . ' role(s). Remove it from all roles first.');
+        }
+
+        $permission->delete();
+
+        Cache::forget('gate_permissions');
+
+        return redirect()->route('admin.permissions.index')->with('success', 'Permission deleted successfully.');
     }
 }

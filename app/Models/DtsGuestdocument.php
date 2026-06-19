@@ -13,6 +13,21 @@ class DtsGuestdocument extends Model
 {
     use HasFactory,  SoftDeletes;
 
+    protected $fillable = [
+        'doctype_id',
+        'doc_description',
+        'school_id',
+        'organization',
+        'from_section_id',
+        'submittedby',
+        'submitter_id',
+        'receiver_section_id',
+        'intended_receiver_id',
+        'actions_needed',
+        'is_accepted',
+        'is_active',
+    ];
+
     public function docType(): BelongsTo
     {
         return $this->belongsTo(DtsDocType::class, 'doctype_id');

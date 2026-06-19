@@ -79,6 +79,7 @@ class DocTypeController extends Controller
      */
     public function update(Request $request)
     {
+        abort_if(Gate::denies('dts_doctype_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $validated = $request->validate([
             'id' => 'required|integer',
             'description' => 'required',

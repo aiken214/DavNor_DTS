@@ -83,7 +83,7 @@
                         <div class="col-sm-9">
                             <input type="text" id="from" class="form-control form-control-sm" value="{{ Auth::user()->name }} | {{ $mySection }}" readonly>
                             <input type="hidden" name="fromuser_id" value="{{ Auth::user()->id }}">
-                            <input type="hidden" name="from_section_id" value="{{ Auth::user()->station_id }}">
+                            <input type="hidden" name="from_section_id" value="{{ Auth::user()->section_id }}">
                         </div>
                     </div>
                     <div class="row mb-24 gy-3 align-items-center">
@@ -109,7 +109,6 @@
                         <label for="actions_needed" class="form-label mb-0 col-sm-3">Actions Needed (Route Purpose)</label>
                         <div class="col-sm-9">
                             <input type="text" id="actions_needed" class="form-control form-control-sm" name="actions_needed">
-                            <input type="hidden" name="from_section_id" value="{{ Auth::user()->section_id }}">
                         </div>
                     </div>
                     <div class="row mb-24 gy-3 align-items-center">
@@ -178,7 +177,6 @@
 @endsection
 
 @section('scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         var baseUrl = "{{ url('/') }}"; // Get the base URL
@@ -201,7 +199,7 @@
                     },
                     success: function(data) {
                         $.each(data, function(index, user) {
-                            userDropdown.append('<option value="' + user.id + '">' + user.name + '</option>');
+                            userDropdown.append($('<option>').val(user.id).text(user.name));
                         });
                         userDropdown.prop('disabled', false);
                     },

@@ -71,7 +71,6 @@
 
             <div class="row">
                 <div class="col-sm-8">
-                    <form>
                         <div class="row mb-3">
                           <label for="typename" class="col-sm-3 col-form-label">Description</label>
                           <div class="col-sm-9">
@@ -99,7 +98,6 @@
                             <button type="submit" class="btn btn-primary float-end">Save New Record</button>
                           </div>
                         </div>
-                      </form>
 
 
                 </div>
