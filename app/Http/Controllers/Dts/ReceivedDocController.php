@@ -54,28 +54,26 @@ class ReceivedDocController extends Controller
             'dts_document_id' => 'required|integer',
             'route_id' => 'required|integer',            
         ]);
-        $documentId = $request->input('dts_document_id');
         $routeId = $request->input('route_id');
         $remarks = $request->input('remarks');
-        $route = DtsDocRoute::find($routeId);
+        $route = DtsDocRoute::findOrFail($routeId);
         $route->status_id = 3;
         $route->date_acted = now();
         $route->end_remarks = $remarks;
         $route->save();
        return redirect()->back()->with('success', 'Document is filed successfully.');
     }
-   
+
     public function fileReleased(Request $request)
     {
         $validated = $request->validate([
             'dts_document_id' => 'required|integer',
-            'route_id' => 'required|integer',  
-            'release_to' => 'required|string',        
+            'route_id' => 'required|integer',
+            'release_to' => 'required|string|max:255',
         ]);
-        $documentId = $request->input('dts_document_id');
         $routeId = $request->input('route_id');
         $remarks = $request->input('remarks');
-        $route = DtsDocRoute::find($routeId);
+        $route = DtsDocRoute::findOrFail($routeId);
         $route->status_id = 4;
         $route->date_acted = now();
         $route->out_released_to=$request->input('release_to');
@@ -88,14 +86,13 @@ class ReceivedDocController extends Controller
     {
         $validated = $request->validate([
             'dts_document_id' => 'required|integer',
-            'route_id' => 'required|integer', 
-            'deferred_reason' => 'required|string',  
-            'defer_until' => 'required|date',       
+            'route_id' => 'required|integer',
+            'deferred_reason' => 'required|string',
+            'defer_until' => 'required|date|after:now',
         ]);
-        $documentId = $request->input('dts_document_id');
         $routeId = $request->input('route_id');
         $deferred_reason = $request->input('deferred_reason');
-        $route = DtsDocRoute::find($routeId);
+        $route = DtsDocRoute::findOrFail($routeId);
         $route->status_id = 5;
         $route->deferred_date = now();
         $route->defer_until = $request->input('defer_until');

@@ -31,6 +31,8 @@
   <!-- main css -->
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/mydatatable.css') }}">
+  <!-- Modern UI Theme -->
+  <link rel="stylesheet" href="{{ asset('assets/css/modern-theme.css') }}">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
  
   
@@ -38,133 +40,133 @@
   <style>
   
   .arrow-down {
-  /* margin: auto; */
-  margin-left: 7rem;
-  width: 0; 
-  height: 0; 
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  
-  border-top: 20px solid rgb(14, 109, 69);
-}
-
-.centering{
-  margin: auto !important;
-}
-  .btn-xs{
-    font-size: 0.7rem !important;
-    padding: 2px 3px !important;
-    border-radius: 2px;
-
-  }
-
- /* Custom CSS to make the select options smaller and vertically centered */
-.custom-select-small {
-    font-size: 0.875rem; /* Adjust the font size */
-    padding: 0.25rem 0.5rem; /* Adjust padding to control height */
-    line-height: 1.5; /* Ensure the text remains vertically centered */
-}
-
-.custom-select-small option {
-    font-size: 0.875rem; /* Match the font size of options */
-    padding: 0.25rem 0.5rem; /* Optionally add padding for consistency */
-    line-height: 1.5; /* Ensure options text is vertically centered */
-}
-
-  
-  .sidebar-menu li {
-    position: relative;
-}
-.sidebar-menu li {
-    position: relative;
-}
-
-.sidebar-menu li a {
-    padding: 0.625rem 0.75rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    color: var(--text-secondary-light);
-    transition: all 0.3s;
-    border-radius: 8px;
-    font-size: 0.875rem;
-}
-
-
-.sidebar-menu li a span {
-    flex-grow: 1; /* Ensures that the text span takes up the remaining space */
-    white-space: nowrap;
-}
-.sidebar-menu li .badge-container {
-    display: flex;
-    justify-content: flex-end; /* Aligns the badge to the right */
-    flex-grow: 0; /* Prevents the badge container from growing */
-    align-items: right;
-    margin-left: auto; /* Pushes the container to the right */
-}
-
-.badge-container .badge-right {
-    display: none;
+    /* margin: auto; */
+    margin-left: 7rem;
+    width: 0; 
+    height: 0; 
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
     
-}
-
-.sidebar-menu li .badge-right {
-    display: inline-block; /* Ensures badge only wraps its content */
-    padding: 0.2em 0.4em;
-    font-size: 0.75rem;
-    font-weight: 600;
-    line-height: 1;
-    color: #fff;
-    text-align: center;
-    white-space: nowrap;
-    border-radius: 0.25rem;
-    background-color: #28a745; /* Default for green badge */
-}
-
-/* Color classes */
-.sidebar-menu li .badge-right.blue { background-color: #052242; }
-.sidebar-menu li .badge-right.green { background-color: #28a745; }
-.sidebar-menu li .badge-right.red { background-color: #dc3545; }
-.sidebar-menu li .badge-right.orange { background-color: #fd7e14; }
-.sidebar-menu li .badge-right.purple { background-color: #6f42c1; }
-.sidebar-menu li .badge-right.yellow { background-color: #ffc107; color: #04351e; }
-.sidebar-menu li .badge-right.aqua { background-color: #17a2b8; color: #d0eea8;}
-
-.small-font {
-    font-size: 0.75rem !important; /* Sets the font size to 0.75rem */
-  }
-  #auth_user_button:focus, #auth_user_button:active {
-    font-size: 0.75rem !important; 
-    color: purple !important; /* Set the text color to purple */
-    outline: none !important; /* Remove the default outline */
-    background-color: transparent !important;
-  }
- 
-  textarea .form-control-sm .textarea-sm{
-   height:6rem !important;
+    border-top: 20px solid rgb(14, 109, 69);
   }
 
-
-
-  .text-box-small{
-    font-size: 0.85rem; 
-    padding: 0.4rem 1.2rem !important;
-    /* padding-left: 1.2rem !important; */
-    border-radius: 0.25rem; 
-
+  .centering{
+    margin: auto !important;
   }
-  textarea.text-box-small{
-    font-size: 0.75rem; 
-    padding: 0.54rem; 
-    border-radius: 0.25rem; 
+    .btn-xs{
+      font-size: 0.7rem !important;
+      padding: 2px 3px !important;
+      border-radius: 2px;
 
-  }
+    }
 
-  textarea.text-box-small::placeholder {
-    font-size: 0.885rem !important;; /* Ensures the placeholder text also has a smaller font size */
+  /* Custom CSS to make the select options smaller and vertically centered */
+  .custom-select-small {
+      font-size: 0.875rem; /* Adjust the font size */
+      padding: 0.25rem 0.5rem; /* Adjust padding to control height */
+      line-height: 1.5; /* Ensure the text remains vertically centered */
   }
 
-  #allsearch {
+  .custom-select-small option {
+      font-size: 0.875rem; /* Match the font size of options */
+      padding: 0.25rem 0.5rem; /* Optionally add padding for consistency */
+      line-height: 1.5; /* Ensure options text is vertically centered */
+  }
+
+    
+    .sidebar-menu li {
+      position: relative;
+  }
+  .sidebar-menu li {
+      position: relative;
+  }
+
+  .sidebar-menu li a {
+      padding: 0.625rem 0.75rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      color: var(--text-secondary-light);
+      transition: all 0.3s;
+      border-radius: 8px;
+      font-size: 0.875rem;
+  }
+
+
+  .sidebar-menu li a span {
+      flex-grow: 1; /* Ensures that the text span takes up the remaining space */
+      white-space: nowrap;
+  }
+  .sidebar-menu li .badge-container {
+      display: flex;
+      justify-content: flex-end; /* Aligns the badge to the right */
+      flex-grow: 0; /* Prevents the badge container from growing */
+      align-items: right;
+      margin-left: auto; /* Pushes the container to the right */
+  }
+
+  .badge-container .badge-right {
+      display: none;
+      
+  }
+
+  .sidebar-menu li .badge-right {
+      display: inline-block; /* Ensures badge only wraps its content */
+      padding: 0.2em 0.4em;
+      font-size: 0.75rem;
+      font-weight: 600;
+      line-height: 1;
+      color: #fff;
+      text-align: center;
+      white-space: nowrap;
+      border-radius: 0.25rem;
+      background-color: #28a745; /* Default for green badge */
+  }
+
+  /* Color classes */
+  .sidebar-menu li .badge-right.blue { background-color: #052242; }
+  .sidebar-menu li .badge-right.green { background-color: #28a745; }
+  .sidebar-menu li .badge-right.red { background-color: #dc3545; }
+  .sidebar-menu li .badge-right.orange { background-color: #fd7e14; }
+  .sidebar-menu li .badge-right.purple { background-color: #6f42c1; }
+  .sidebar-menu li .badge-right.yellow { background-color: #ffc107; color: #04351e; }
+  .sidebar-menu li .badge-right.aqua { background-color: #17a2b8; color: #d0eea8;}
+
+  .small-font {
+      font-size: 0.75rem !important; /* Sets the font size to 0.75rem */
+    }
+    #auth_user_button:focus, #auth_user_button:active {
+      font-size: 0.75rem !important; 
+      color: purple !important; /* Set the text color to purple */
+      outline: none !important; /* Remove the default outline */
+      background-color: transparent !important;
+    }
+  
+    textarea .form-control-sm .textarea-sm{
+    height:6rem !important;
+    }
+
+
+
+    .text-box-small{
+      font-size: 0.85rem; 
+      padding: 0.4rem 1.2rem !important;
+      /* padding-left: 1.2rem !important; */
+      border-radius: 0.25rem; 
+
+    }
+    textarea.text-box-small{
+      font-size: 0.75rem; 
+      padding: 0.54rem; 
+      border-radius: 0.25rem; 
+
+    }
+
+    textarea.text-box-small::placeholder {
+      font-size: 0.885rem !important;; /* Ensures the placeholder text also has a smaller font size */
+    }
+
+    #allsearch {
         position: relative;
         display: flex;
         align-items: center;
@@ -172,14 +174,14 @@
 
     #searchInput {
         flex: 1;
-        padding-right: 30px; /* Add some padding to the right to make space for the icon */
+        padding-right: 30px !important; /* Add some padding to the right to make space for the icon */
     }
 
     #searchIcon {
         position: absolute !important;
-        right: 10px; /* Adjust the value as needed */
+        right: 10px !important; /* Adjust the value as needed */
         cursor: pointer;
-    }
+    }    
 
   </style>
   
@@ -207,9 +209,9 @@
         </button>
         <form class="navbar-search" method="post" action="{{ route('dts.search') }}">
           @csrf
-          <div class="search-container" id="allsearch">
+          <div id="allsearch">
           <input type="text" name="search" placeholder="Search" id="searchInput">
-          <iconify-icon icon="ion:search-outline" class="icon" id="searchIcon"></iconify-icon>
+          <iconify-icon icon="ion:search-outline" id="searchIcon"></iconify-icon>
           </div>
         </form>
       </div>
@@ -328,14 +330,14 @@
     <div class="col-auto">
       <p class="mb-0">
         @if(isset($systemSetting) && $systemSetting !=NULL)
-        {{ $systemSetting->organization->name }} | {{ $systemSetting->custom_system_name }}
+        {{ $systemSetting->custom_system_name }}
         @else
         © {{ date('Y') }}   Document Tracking System <small>| Developed by : Stephen R. Pascual</small>
         @endif
       </p>
     </div>
     <div class="col-auto">
-      <p class="mb-0">DTS <span class="text-success-400">ver 3.3 </span></p>
+      <p class="mb-0">DTS <span class="text-success-400">ver 3.4 </span></p>
     </div>
   </div>
 </footer>

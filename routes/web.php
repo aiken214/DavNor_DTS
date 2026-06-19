@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MydashboardController;
+use App\Http\Controllers\UserManualController;
 use App\Http\Controllers\MyProfilePageController;
 use App\Http\Controllers\GuestDtsController;
 use App\Http\Controllers\ProfileController;
@@ -34,9 +35,9 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/sign-in', function () {
-    return view('sign-in');
-})->name('login');
+// Route::get('/sign-in', function () {
+//     return view('sign-in');
+// })->name('login');
 
 Route::get('/guest-dts', [GuestDtsController::class, 'createGuestDocument'])->name('guest-dts');
 Route::get('/user-by-section/{sectionId}', [GuestDtsController::class, 'getUserBySecId']);
@@ -45,7 +46,7 @@ Route::post('/save-document', [GuestDtsController::class, 'storeGuestDocument'])
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [MydashboardController::class, 'index'])->name('dashboard');
     Route::post('/user/update-station', [UserController::class, 'updateStation'])->name('user.updateStation');
-   
+    Route::get('/user-manual', [UserManualController::class, 'index'])->name('user-manual');
 });
 
 

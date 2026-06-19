@@ -136,7 +136,7 @@ class BatchReleaseController extends Controller
         ]);
 
         // Create the batch release
-        $batchRelease = DtsBatchRelease::create($request->all());
+        $batchRelease = DtsBatchRelease::create($request->only(['name', 'description', 'createdby_id', 'section_id', 'release_date', 'receiver_name']));
 
         // return response()->json([
         //     'message' => 'Batch release created successfully.',

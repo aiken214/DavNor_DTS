@@ -17,7 +17,7 @@ class DtsSystemSettingTableSeeder extends Seeder
             [
                 'id'    => 1,
                 'org_dts_code' => '12',
-                'custom_system_name'=>'Digos City Division Document Tracking System',
+                'custom_system_name'=>'DepEd Davao del Norte Document Tracking System',
                 'created_at' =>date('Y-m-d H:i:s'),
             ],
            

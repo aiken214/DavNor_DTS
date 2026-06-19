@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\dts;
+namespace App\Http\Controllers\Dts;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -52,29 +52,27 @@ class DeferredDocController extends Controller
             'dts_document_id' => 'required|integer',
             'route_id' => 'required|integer',            
         ]);
-        $documentId = $request->input('dts_document_id');
         $routeId = $request->input('route_id');
         $remarks = $request->input('remarks');
-        $route = DtsDocRoute::find($routeId);
+        $route = DtsDocRoute::findOrFail($routeId);
         $route->status_id = 3;
         $route->date_acted = now();
         $route->end_remarks = $remarks;
         $route->save();
        return redirect()->route('dts.deferred-docs.index')->with('success', 'Document is filed successfully');
     }
-   
+
     public function fileReleased(Request $request)
     {
         abort_if(Gate::denies('dts_route_release'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $validated = $request->validate([
             'dts_document_id' => 'required|integer',
-            'route_id' => 'required|integer',  
-            'release_to' => 'required|string',        
+            'route_id' => 'required|integer',
+            'release_to' => 'required|string|max:255',
         ]);
-        $documentId = $request->input('dts_document_id');
         $routeId = $request->input('route_id');
         $remarks = $request->input('remarks');
-        $route = DtsDocRoute::find($routeId);
+        $route = DtsDocRoute::findOrFail($routeId);
         $route->status_id = 4;
         $route->date_acted = now();
         $route->out_released_to=$request->input('release_to');

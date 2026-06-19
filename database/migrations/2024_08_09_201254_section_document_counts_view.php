@@ -17,6 +17,7 @@ return new class extends Migration
             Schema::drop('section_document_counts');
         }
 
+        if (DB::getDriverName() !== 'sqlite') {
         DB::statement("
             CREATE VIEW `section_document_counts` AS
             SELECT `section_id`, 
@@ -189,6 +190,7 @@ return new class extends Migration
             ) AS combined
             GROUP BY `section_id`;
         ");
+        }
     }
 
     /**

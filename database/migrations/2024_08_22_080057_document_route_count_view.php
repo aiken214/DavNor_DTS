@@ -19,8 +19,9 @@ return new class extends Migration
             Schema::drop('doc_route_yearcount');
         }
 
-        DB::statement('
-        CREATE VIEW doc_route_yearcount AS
+            if (DB::getDriverName() !== 'sqlite') {
+                DB::statement('
+                CREATE VIEW doc_route_yearcount AS
         SELECT 
             for_section_id,
             YEAR(date_accepted) AS year,
@@ -36,6 +37,7 @@ return new class extends Migration
             for_section_id, 
             year;
     ');
+                }
     }
 
     /**
@@ -43,7 +45,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('DROP VIEW IF EXISTS document_route_count');
+        DB::statement('DROP VIEW IF EXISTS doc_route_yearcount');
     }
     
 };

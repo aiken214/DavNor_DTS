@@ -96,7 +96,7 @@
           <i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> My Documents
         </a>
       </li>
-      {{-- @can('dts_access')
+      @can('dts_access')
       <li>
         <a href="#m"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Routed for Me</a>
       </li>
@@ -108,7 +108,7 @@
       <li>
         <a href="#SP"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i> Stats Per Sections</a>
       </li>
-      @endcan --}}
+      @endcan
       
     </ul>
   </li>
@@ -185,6 +185,14 @@
     </ul>
   </li>
   @endcan
+
+  <li class="sidebar-menu-group-title">Help</li>
+  <li>
+    <a href="{{ route('user-manual') }}">
+      <iconify-icon icon="solar:book-linear" class="menu-icon"></iconify-icon>
+      <span>User's Manual</span>
+    </a>
+  </li>
 
 </ul>
 </div>

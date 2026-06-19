@@ -136,18 +136,17 @@ public function cancelForwardedDoc(Request $request)
             'route_id' => 'required|exists:dts_doc_routes,id',
                ]);
             // check if the route_id is not duplicate with prev_route_id column
-             $hasDocRoute = DtsDocRoute::findOrFail($request->route_id)
-                     ->where('prev_route_id', $request->route_id);
+             $hasDocRoute = DtsDocRoute::where('previous_route_id', $request->route_id)
+                     ->whereNull('deleted_at')
+                     ->exists();
 
                 if ($hasDocRoute) {
                     return response()->json([
                         'message' => 'Document cannot be restored. It is a duplicate.',
-                    ]);
-                } else{
-                    $docRoute = DtsDocRoute::findOrFail($request->route_id);
-                    $docRoute->update([
-                        'deleted_at' => null,
-                    ]);
+                    ], 409);
+                } else {
+                    $docRoute = DtsDocRoute::withTrashed()->findOrFail($request->route_id);
+                    $docRoute->restore();
                     return response()->json([
                         'message' => 'Document restored successfully.',
                         'doc_route' => $docRoute,

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -16,6 +17,7 @@ return new class extends Migration
             Schema::drop('section_forwarded_counts');
         }
 
+            if (DB::getDriverName() !== 'sqlite') {
          DB::statement("
          CREATE VIEW section_forwarded_counts AS
                 SELECT `section_id`, 
@@ -156,6 +158,7 @@ return new class extends Migration
                 ) AS combined_counts
                 GROUP BY `section_id`;
          ");
+        }
 
 
 

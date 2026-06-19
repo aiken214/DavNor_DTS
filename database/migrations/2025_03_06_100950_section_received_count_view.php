@@ -1,3 +1,4 @@
+use Illuminate\Support\Facades\DB;
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -18,6 +19,7 @@ return new class extends Migration
             Schema::drop('section_received_counts');
         }
 
+            if (DB::getDriverName() !== 'sqlite') {
          DB::statement("
          CREATE VIEW section_received_counts AS
             SELECT `section_id`, 
@@ -159,6 +161,7 @@ return new class extends Migration
             GROUP BY `section_id`;
          
          ");
+            }
 
 
     }

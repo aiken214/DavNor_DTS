@@ -31,6 +31,8 @@
   <link rel="stylesheet" href="{{ asset('assets/css/lib/slick.css') }}">
   <!-- main css -->
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+  <!-- Modern UI Theme -->
+  <link rel="stylesheet" href="{{ asset('assets/css/modern-theme.css') }}">
 </head>
 <body>
 @if (Auth::check())
@@ -73,7 +75,7 @@
                     <div class="col-sm-9">
                         @if(isset($docTypes))
                         <select name="doctype_id" id="doctype_id" class="form-control form-control-sm" required>
-                            <option value="" style="visibility: hidden; display:none;">Select Document Type</option>
+                            <option value="" disabled selected>Select Document Type</option>
                             @foreach ($docTypes as $type)
                                 <option value="{{ $type->id }}">{{ $type->description }}</option>
                             @endforeach
@@ -101,7 +103,7 @@
                     <div class="col-sm-9">
                       
                         <select name="to_section_id" id="to_section_id" class="form-control form-control-sm" required>
-                            <option value="" style="visibility: hidden; display:none;">Select Section</option>
+                            <option value="" disabled selected>Select Section</option>
                             @foreach ($sections as $section)
                                 <option value="{{ $section->id }}">{{ $section->name }}</option>
                             @endforeach
@@ -113,7 +115,7 @@
                     <label for="to_user_id" class="form-label mb-0 col-sm-3">Employee</label>
                     <div class="col-sm-9">
                         <select name="to_user_id" id="to_user_id" class="form-control form-control-sm" required>
-                            <option value="" style="visibility: hidden; display:none;">Select Staff</option>
+                            <option value="" disabled selected>Select Staff</option>
                             <!-- Options will be dynamically populated here -->
                         </select>
                          <div class="alert alert-danger mt-2 d-none" id="user-fetch-error">
@@ -179,8 +181,6 @@
   initializePasswordToggle('.toggle-password');
 </script>
 
-@section('scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         var baseUrl = "{{ url('/') }}"; // Get the base URL

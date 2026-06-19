@@ -88,7 +88,7 @@
                         <span class="input-group-text bg-base">
                           <iconify-icon icon="ic:twotone-qrcode"></iconify-icon>
                         </span>
-                        <input type="text" class="form-control flex-grow-1" id="doc_track" name="doc_track" autofocus>
+                        <input type="text" class="form-control flex-grow-1" name="doc_track" autofocus>
                       </div>
                     </form>
                   </div>
