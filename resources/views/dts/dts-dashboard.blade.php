@@ -136,21 +136,6 @@
   <div style="padding-top: 25px;"> </div>
   <div class="row">
     <div class="col-sm-6">
-      <div class="card">
-        <div class="card-body">
-          <h6 class="fw-semibold text-primary mb-6">Dedicated QR Scanning Page</h6>
-        <p>
-          For continuous scanning sessions, use the dedicated scanning page with a larger camera view.
-        </p>
-        <p>
-          <a href="{{ route('dts.webcam-qr-scan') }}" class="btn btn-success btn-sm">
-            <iconify-icon icon="mdi:qrcode-scan" class="icon me-1"></iconify-icon> Open Scanning Page
-          </a>
-        </p>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-6">
       <div class="card">  
         <div class="card-header">{{ $mySection }} Today's Received Counts</div>      
         <div class="card-body">
