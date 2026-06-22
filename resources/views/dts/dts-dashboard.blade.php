@@ -79,13 +79,14 @@
                     <p>
                       Scan a QR code using a hardware scanner or your phone's camera to accept documents quickly.
                     </p>
-                    <label class="form-label">QR Code / Tracking Number</label>
+                    <label class="form-label">QR Code Scan</label>
                     <form action="{{ route('dts.quick-receipt') }}" method="post" id="qrcode-form">
                       @csrf
                       <div class="input-group mb-12">
                         <span class="input-group-text bg-base">
                           <iconify-icon icon="ic:twotone-qrcode"></iconify-icon>
                         </span>
+                        
                         <input type="text" class="form-control flex-grow-1" name="doc_track" id="doc_track" autofocus>
                       </div>
                     </form>

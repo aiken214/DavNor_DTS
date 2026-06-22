@@ -117,7 +117,19 @@
                                      data-adfdoc_id ="{{ $documentRoute->document->id }}"
                                      >
                                     Accept and File </a></li>
-                                  
+                                  @if(isset($isRecordSection) && $isRecordSection && $pigeonholes->count() > 0)
+                                  <li><hr class="dropdown-divider"></li>
+                                  <li>
+                                    <a class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900" href="javascript:void(0)"
+                                    data-bs-toggle="modal" data-bs-target="#sendToPigeonholeModal"
+                                    data-phrouteid="{{ $documentRoute->id }}"
+                                    data-phdetails="{{ $documentRoute->docType->description }} - {{ $documentRoute->document->description }}"
+                                    data-phfrom="{{ $documentRoute->fromSection->name }} | {{ $documentRoute->fromUser->name }}"
+                                    data-phdoc_id="{{ $documentRoute->document->id }}"
+                                    >
+                                    <iconify-icon icon="mdi:mailbox-open-outline" class="me-1"></iconify-icon> Send to Pigeonhole</a>
+                                  </li>
+                                  @endif
                                 </ul>
                             </div>
                             
@@ -253,6 +265,63 @@
   </div>
 <!--//AcceptFile Modal -->
 
+@if(isset($isRecordSection) && $isRecordSection && $pigeonholes->count() > 0)
+<!--Send to Pigeonhole Modal -->
+<div class="modal fade" id="sendToPigeonholeModal" tabindex="-1" aria-labelledby="sendToPigeonholeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form action="{{ route('dts.incoming-docs.send-to-pigeonhole') }}" method="post">
+            @csrf
+        <div class="modal-header">
+          <h6 class="modal-title fs-5" id="sendToPigeonholeModalLabel">Send Document to Pigeonhole</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3 row">
+                <div class="col-sm-3">Description</div>
+                <div class="col-sm-9 align-self-center" id="phDocDesc"></div>
+            </div>
+            <div class="mb-3 row">
+                <div class="col-sm-3">From</div>
+                <input type="hidden" name="doc_route_id" id="phDocRouteId">
+                <input type="hidden" name="document_id" id="phDocId">
+                <div class="col-sm-9" id="phDocFrom"></div>
+            </div>
+            <div class="mb-3 row">
+                <label for="pigeonhole_id" class="col-sm-3 col-form-label">Pigeonhole</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="pigeonhole_id" name="pigeonhole_id" required>
+                        <option value="">-- Select Pigeonhole --</option>
+                        @foreach($pigeonholes as $pigeonhole)
+                            <option value="{{ $pigeonhole->id }}" data-section="{{ $pigeonhole->section->name ?? '' }}">
+                                {{ $pigeonhole->name }} — {{ $pigeonhole->section->name ?? 'N/A' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="phRemarks" class="col-sm-3 col-form-label">Remarks (optional)</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" name="remarks" id="phRemarks">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <div class="col-sm-3">Processed By</div>
+                <div class="col-sm-9">{{ Auth::user()->name }}</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Send to Pigeonhole</button>
+        </div>
+    </form>
+      </div>
+    </div>
+</div>
+<!--//Send to Pigeonhole Modal -->
+@endif
+
 @endsection
 
 
@@ -310,6 +379,15 @@ $('#acceptDocModal').on('show.bs.modal', function (event) {
   modal.find('#acptDocRouteId').val(routeId)
   modal.find('#acptDocFrom').text(acptFrom)
   modal.find('#acptDocId').val(docId)
+});
+
+$('#sendToPigeonholeModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var modal = $(this);
+    modal.find('#phDocRouteId').val(button.data('phrouteid'));
+    modal.find('#phDocDesc').text(button.data('phdetails'));
+    modal.find('#phDocFrom').text(button.data('phfrom'));
+    modal.find('#phDocId').val(button.data('phdoc_id'));
 });
 
 $('#acceptDocFileModal').on('show.bs.modal', function (event) {

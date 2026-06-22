@@ -143,31 +143,45 @@
                 <div class="card-body">
                     @foreach($docRoutes as $route)
         <div class="arrow-down"></div>
-     
+
         <div class="m-5">
-           <div> 
+           <div>
             @can('permission_show')
                 <div class="small centering">Route ID : {{ $route->id ?? '' }}  -- STATUS ID {{ $route->status_id }}</div>
             @endcan
 
-                <div class="centering">To : {{ $route->forSection->name ?? '' }}</div>  
-                @if($route->receiverUser != NULL) 
+                <div class="centering">From : {{ $route->fromSection->name ?? '' }} <small>{{ $route->fromUser->name ?? '' }}</small></div>
+                <div class="centering">To : {{ $route->forSection->name ?? '' }}</div>
+                @if($route->receiverUser != NULL)
                 <div class="centering">Receiver: {{ $route->receiverUser->name ?? '' }}</div>
                 @endif
-                <div class="centering">Route Date: @dateDateTime($route->created_at)</div>
+                @if($route->route_purpose)
+                <div class="centering">Purpose: {{ $route->route_purpose }}</div>
+                @endif
+                <div class="centering">Date Forwarded: @dateDateTime($route->date_forwarded)</div>
                 <div class="centering">
-                    Date Accepted: 
-                    @if($route->date_accepted != NULL)                    
+                    Date Accepted:
+                    @if($route->date_accepted != NULL)
                     @dateDateTime($route->date_accepted)
                     @else
                     <span class="text-danger">NOT YET ACCEPTED</span>
                     @endif
                 </div>
-                <div class="centering">Actions Taken: {{ $route->actions_taken ?? '' }}</div>
-                                                            
+                @if($route->accepting_remarks)
+                <div class="centering">Accepting Remarks: {{ $route->accepting_remarks }}</div>
+                @endif
+                @if($route->actions_taken)
+                <div class="centering">Actions Taken: {{ $route->actions_taken }}</div>
+                @endif
+                @if($route->date_acted)
+                <div class="centering">Date Acted: @dateDateTime($route->date_acted) <small>{{ optional($route->actedByUser)->name }}</small></div>
+                @endif
+                @if($route->end_remarks)
+                <div class="centering">Remarks: {{ $route->end_remarks }}</div>
+                @endif
             </div>
         </div>
-                   
+
         @endforeach
 
                 </div>

@@ -43,4 +43,14 @@ class DtsGuestdocument extends Model
         return $this->belongsTo(DtsSection::class, 'from_section_id');
     }
 
+    public function receiverSection(): BelongsTo
+    {
+        return $this->belongsTo(DtsSection::class, 'receiver_section_id');
+    }
+
+    public function intendedReceiver(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'intended_receiver_id');
+    }
+
 }

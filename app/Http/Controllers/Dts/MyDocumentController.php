@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\DtsDocument;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 use App\Models\DtsSystemSetting;
 use App\Models\DtsSection;
 use App\Models\DtsDocRoute;
@@ -134,9 +136,72 @@ class MyDocumentController extends Controller
             $pdf = PDF::loadView('dts.qr-bottom-left', $data);
             return $pdf->stream('dts-qr-bottomleft.pdf');
         }
-    
 
+    private function getCommonData()
+    {
+        $mySection = null;
+        $assignedSection = DtsSection::where('id', Auth::user()->section_id)->first();
+        if ($assignedSection) {
+            $mySection = $assignedSection->name;
+        }
+        $myAllSections = DB::table('section_user')
+            ->join('dts_sections', 'dts_sections.id', '=', 'section_user.section_id')
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('name', 'asc')
+            ->get();
+        $systemSetting = DtsSystemSetting::first();
 
+        return compact('mySection', 'myAllSections', 'systemSetting');
+    }
+
+    public function routedForMe()
+    {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $commonData = $this->getCommonData();
+
+        $documents = DtsDocRoute::with(['document', 'fromSection', 'fromUser', 'forSection', 'docType'])
+            ->where('for_user_id', Auth::id())
+            ->whereHas('document')
+            ->orderBy('id', 'desc')
+            ->paginate(100);
+
+        return view('dts.mydts.routed-for-me', array_merge($commonData, compact('documents')));
+    }
+
+    public function acceptedByMe()
+    {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $commonData = $this->getCommonData();
+
+        $documents = DtsDocRoute::with(['document', 'fromSection', 'fromUser', 'forSection', 'docType'])
+            ->where('receiver_user_id', Auth::id())
+            ->whereNotNull('date_accepted')
+            ->whereHas('document')
+            ->orderBy('date_accepted', 'desc')
+            ->paginate(100);
+
+        return view('dts.mydts.accepted-by-me', array_merge($commonData, compact('documents')));
+    }
+
+    public function statsPerSection()
+    {
+        abort_if(Gate::denies('dts_reports_mngt'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $commonData = $this->getCommonData();
+
+        $sectionStats = DB::table('section_document_counts')
+            ->join('dts_sections', 'dts_sections.id', '=', 'section_document_counts.section_id')
+            ->select(
+                'dts_sections.name as section_name',
+                'section_document_counts.*'
+            )
+            ->orderBy('dts_sections.name')
+            ->get();
+
+        return view('dts.mydts.stats-per-section', array_merge($commonData, compact('sectionStats')));
+    }
 
 }
 

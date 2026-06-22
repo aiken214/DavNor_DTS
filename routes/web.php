@@ -21,6 +21,8 @@ use App\Http\Controllers\Dts\DtsDocRouteController;
 use App\Http\Controllers\Dts\BatchReleaseController;
 use App\Http\Controllers\Dts\BarcodePrintController;
 use App\Http\Controllers\Admin\SectionController;
+use App\Http\Controllers\Admin\PigeonholeController;
+use App\Http\Controllers\Admin\SectionStatisticsController;
 use App\Http\Controllers\Dts\QrCodeReceiptController;
 use App\Http\Controllers\Dts\MyDocumentController;
 use App\Http\Controllers\Dts\MyStationController;
@@ -42,6 +44,7 @@ Route::get('/', function () {
 Route::get('/guest-dts', [GuestDtsController::class, 'createGuestDocument'])->name('guest-dts');
 Route::get('/user-by-section/{sectionId}', [GuestDtsController::class, 'getUserBySecId'])->middleware('throttle:30,1');
 Route::post('/save-document', [GuestDtsController::class, 'storeGuestDocument'])->name('guest-document-store')->middleware('throttle:10,1');
+Route::get('/guest-dts/confirmation/{id}', [GuestDtsController::class, 'confirmation'])->name('guest-dts-confirmation');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [MydashboardController::class, 'index'])->name('dashboard');
@@ -87,9 +90,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('/system-settings', [SystemSettingController::class, 'index'])->name('system-settings.index');
     Route::get('/system-settings/{dtsSystemSetting}/edit', [SystemSettingController::class, 'edit'])->name('system-settings.edit');
     Route::patch('/system-settings/{dtsSystemSetting}', [SystemSettingController::class, 'update'])->name('system-settings.update');
-   
-   
-    
+
+    Route::get('/pigeonholes', [PigeonholeController::class, 'index'])->name('pigeonholes.index');
+    Route::post('/pigeonholes', [PigeonholeController::class, 'store'])->name('pigeonholes.store');
+    Route::post('/pigeonholes/update', [PigeonholeController::class, 'update'])->name('pigeonholes.update');
+    Route::post('/pigeonholes/delete', [PigeonholeController::class, 'destroy'])->name('pigeonholes.destroy');
+
+    Route::get('/section-statistics', [SectionStatisticsController::class, 'index'])->name('section-statistics.index');
 });
 
 Route::group(['prefix' => 'dts', 'as' => 'dts.', 'namespace' => 'Dts', 'middleware' => ['auth']], function(){
@@ -117,6 +124,7 @@ Route::group(['prefix' => 'dts', 'as' => 'dts.', 'namespace' => 'Dts', 'middlewa
     Route::get('/incoming-docs', [IncomingDocController::class, 'index'])->name('incoming-docs.index');
     Route::post('/incoming-docs/accept', [IncomingDocController::class, 'acceptDoc'])->name('incomingdoc-accept');
     Route::post('/incoming-docs/accept-andfile', [IncomingDocController::class, 'acceptAndFileDoc'])->name('incomingdoc-accept-andfile');
+    Route::post('/incoming-docs/send-to-pigeonhole', [IncomingDocController::class, 'sendToPigeonhole'])->name('incoming-docs.send-to-pigeonhole');
    
 
     //QR COde search/receipt
@@ -172,6 +180,10 @@ Route::group(['prefix' => 'dts', 'as' => 'dts.', 'namespace' => 'Dts', 'middlewa
     Route::get('/my-print-top-right/{docId}', [MyDocumentController::class, 'myPrintTopRight'])->name('my-print-top-right');
     Route::get('/my-print-bottom-right/{docId}', [MyDocumentController::class, 'myPrintBottomRight'])->name('my-print-bottom-right');
     Route::get('/my-print-bottom-left/{docId}', [MyDocumentController::class, 'myPrintBottomLeft'])->name('my-print-bottom-left');
+
+    Route::get('/routed-for-me', [MyDocumentController::class, 'routedForMe'])->name('routed-for-me');
+    Route::get('/accepted-by-me', [MyDocumentController::class, 'acceptedByMe'])->name('accepted-by-me');
+    Route::get('/stats-per-section', [MyDocumentController::class, 'statsPerSection'])->name('stats-per-section');
 
     
 
