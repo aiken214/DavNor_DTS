@@ -154,57 +154,12 @@ public function quickReceipt(Request $request){
                     } 
                     //end Previous Section ID
               //----------------------------------------   
-            //check if the last route is at user section
             if(Auth::user()->section_id != $document->routeForSecId){
-                // Not Routed to MySection, Just  Create New Route & Accept then update the current route to status_id 6
-                $data=[
-                    'dts_document_id' => $document->id,
-                    'previous_route_id' => $document->latest_route_id,
-                    'route_purpose' => $document->actions_needed,
-                    'from_user_id' => $this->getPreviousForUserId($document->latest_route_id),  // get the previous route for_user_id
-                    'from_section_id' => $prevSectionId,
-                    'for_section_id' => Auth::user()->section_id,
-                    'for_user_id' => Auth::user()->id,
-                    'receiver_user_id' => Auth::user()->id,
-                    'date_forwarded'=> date('Y-m-d H:i:s'),
-                    'status_id' => 2,
-                    'io_type' => 1,
-                    'accepting_remarks' => 'QR Scan Acceptance',
-                    'is_qr_accept' => true,
-                    'date_accepted' => date('Y-m-d H:i:s'),
-                    'created_at' => date('Y-m-d H:i:s'),
-
-                ];
-                DB::transaction(function () use ($data, $document, &$message) {
-                    if($this->notDuplicateRoute($document->latest_route_id, Auth::user()->section_id, $document->id)){
-                        $newRouteId = DB::table('dts_doc_routes')->insertGetId($data);
-                        if($newRouteId){
-                            // update the previous route to status 6
-                            $dataforPrev = [
-                                'status_id' => 6,
-                           //     'date_acted' => date('Y-m-d H:i:s'), //for review
-                                'updated_at' => date('Y-m-d H:i:s'),
-                            ];
-                            DB::table('dts_doc_routes')
-                                ->where('id', $document->latest_route_id)
-
-                                ->update($dataforPrev);
-                        }
-                    } else {
-                        $message = "Route Already Exist (Case 1A);";
-                    }
-                });
-               // $message.= "Case 1 - Document is accepted to section ID : ". Auth::user()->section_id . " : Prev SectionID : ".$prevSectionId;
-                $message.= "Document is accepted to your section successfully";
-            } //--end of check if the last route is at user section
+                return redirect()->back()->with('error', 'This document is not forwarded to your section. It is currently routed to another section.');
+            }
             else{
-                 //check if the document is already accepted
                 if($document->routeDateAccepted !=NULL){
-                    $routeId=$document->latest_route_id;
-                    $previousRouteId = $document->previous_route_id;
-                    
-                  //  $message.= "Doc Route Already Accepted Date Accepted  : ".$document->routeDateAccepted . ' (Case 2)';
-                    $message.= "Document is accepted to your section successfully..";
+                    return redirect()->back()->with('error', 'This document has already been received by your section on ' . date('M d, Y h:i A', strtotime($document->routeDateAccepted)) . '.');
                 }else{
                     // Accept the document Update the Route Date Accepted
                     $routeId=$document->latest_route_id;
@@ -244,30 +199,8 @@ public function quickReceipt(Request $request){
 
 
 
-           } else{  // No Route Recorded but Document Existed
-           
-            $data=[
-                'dts_document_id' => $document->id,
-                'previous_route_id' => NULL,
-                'route_purpose' => 'For Receiving',
-                'from_user_id' => $document->fromuser_id,
-                'from_section_id' => $document->from_section_id,
-                'for_section_id' => Auth::user()->section_id,
-                'for_user_id' => Auth::user()->id,
-                'receiver_user_id' => Auth::user()->id,
-                'date_forwarded'=> date('Y-m-d H:i:s'),
-                'status_id' => 2,
-                'io_type' => 1,
-                'accepting_remarks' => 'QR Scan Acceptance',
-                'is_qr_accept' => true,
-                'date_accepted' => date('Y-m-d H:i:s'),
-                'created_at' => date('Y-m-d H:i:s'),
-
-            ];
-    
-     $newRouteId = DB::table('dts_doc_routes')->insertGetId($data);        
-     $message= "Document is accepted to your section successfully....";
-
+           } else{
+                return redirect()->back()->with('error', 'This document has no active route. It has not been forwarded to any section yet.');
            }
 
     }else{
