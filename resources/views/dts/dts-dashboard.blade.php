@@ -90,8 +90,8 @@
                       </div>
                     </form>
 
-                    <button type="button" class="btn btn-success btn-sm w-100" id="toggleCameraBtn">
-                      <iconify-icon icon="mdi:camera" class="icon text-lg me-1"></iconify-icon>
+                    <button type="button" class="btn btn-success btn-sm w-100 d-flex align-items-center justify-content-center gap-2" id="toggleCameraBtn">
+                      <iconify-icon icon="mdi:camera" class="icon text-lg"></iconify-icon>
                       <span id="cameraBtnText">Scan with Camera</span>
                     </button>
                     <div id="dashboard-reader" class="mt-12" style="display:none;"></div>
