@@ -41,7 +41,7 @@ class GuestDocController extends Controller
                        ->orderBy('name')
                        ->get();   
         $docTypes = DtsDocType::select('id', 'description')->orderBy('description')->get();  
-        $documents = DtsGuestdocument::with(['docType', 'fromSection', 'fromUser'])
+        $documents = DtsGuestdocument::with(['docType', 'fromSection', 'fromUser', 'receiverSection', 'intendedReceiver'])
             ->where('receiver_section_id', Auth::user()->section_id)
             ->where('is_accepted', FALSE)
             ->get();

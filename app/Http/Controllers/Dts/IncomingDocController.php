@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use App\Models\DtsPigeonhole;
 use Carbon\Carbon;
 
 
@@ -41,9 +42,12 @@ class IncomingDocController extends Controller
             ->whereNull('date_accepted')
             ->where('status_id', 1)
             ->orderBy('id', 'desc')
-            ->paginate(1000);    
-            
-      return view("dts.incoming-docs", compact('tableTitle', 'mySection', 'documents', 'myAllSections', 'systemSetting'));
+            ->paginate(1000);
+
+        $isRecordSection = $assignedSection ? $assignedSection->is_record_management : false;
+        $pigeonholes = $isRecordSection ? DtsPigeonhole::with('section')->where('is_active', true)->orderBy('name')->get() : collect();
+
+      return view("dts.incoming-docs", compact('tableTitle', 'mySection', 'documents', 'myAllSections', 'systemSetting', 'isRecordSection', 'pigeonholes'));
     }
 
 
@@ -81,6 +85,57 @@ class IncomingDocController extends Controller
     }
     
     
+    public function sendToPigeonhole(Request $request)
+    {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $validated = $request->validate([
+            'doc_route_id' => 'required|numeric|exists:dts_doc_routes,id',
+            'document_id' => 'required|numeric|exists:dts_documents,id',
+            'pigeonhole_id' => 'required|numeric|exists:dts_pigeonholes,id',
+            'remarks' => 'nullable|string|max:255',
+        ]);
+
+        try {
+            $pigeonhole = DtsPigeonhole::findOrFail($validated['pigeonhole_id']);
+
+            DB::transaction(function () use ($validated, $pigeonhole, $request) {
+                $docRoute = DtsDocRoute::findOrFail($validated['doc_route_id']);
+                $docRoute->date_accepted = now();
+                $docRoute->receiver_user_id = Auth::id();
+                $docRoute->accepting_remarks = 'Received and sent to Pigeonhole: ' . $pigeonhole->name;
+                $docRoute->io_type = 1;
+                $docRoute->status_id = 6;
+                $docRoute->date_acted = now();
+                $docRoute->actedby_user_id = Auth::id();
+                $docRoute->end_remarks = 'Sent to Pigeonhole: ' . $pigeonhole->name;
+                $docRoute->save();
+
+                DtsDocRoute::create([
+                    'dts_document_id' => $validated['document_id'],
+                    'previous_route_id' => $validated['doc_route_id'],
+                    'from_user_id' => Auth::id(),
+                    'from_section_id' => Auth::user()->section_id,
+                    'for_section_id' => $pigeonhole->section_id,
+                    'for_user_id' => $pigeonhole->section->default_user_id,
+                    'date_forwarded' => now(),
+                    'status_id' => 1,
+                    'io_type' => 1,
+                    'route_purpose' => 'Via Pigeonhole: ' . $pigeonhole->name . ($request->remarks ? ' | ' . $request->remarks : ''),
+                    'pigeonhole_id' => $pigeonhole->id,
+                ]);
+            });
+
+            return redirect()->route('dts.incoming-docs.index')
+                ->with('success', 'Document sent to Pigeonhole: ' . $pigeonhole->name . ' (' . $pigeonhole->section->name . ') by ' . Auth::user()->name);
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->route('dts.incoming-docs.index')
+                ->with('error', 'An error occurred while sending the document to pigeonhole.');
+        }
+    }
+
     public function acceptAndFileDoc(Request $request)
     {
         abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');

@@ -50,12 +50,22 @@ class GuestDtsController extends Controller
         $guestDocument->receiver_section_id = $request->to_section_id;
         $guestDocument->intended_receiver_id = $request->to_user_id;
         $guestDocument->actions_needed = $request->actions_needed;       
-        $guestDocument->created_at= now();      
+        $guestDocument->created_at= now();
         $guestDocument->save();
 
-        return redirect()->route('guest-dts')->with('success', 'Your document has been submitted successfully.');
+        return redirect()->route('guest-dts-confirmation', $guestDocument->id);
     }
 
+    public function confirmation($id)
+    {
+        if (auth()->check()) {
+            return redirect()->route('dashboard');
+        }
+
+        $guestDocument = DtsGuestdocument::with(['docType', 'receiverSection', 'intendedReceiver'])->findOrFail($id);
+
+        return view('guest-dts-confirmation', compact('guestDocument'));
+    }
 
     public function getUserBySecId($sectionId)
     {

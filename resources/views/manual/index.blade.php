@@ -38,7 +38,7 @@
                         <li><a href="#forwarding" class="toc-link">8. Forwarding Documents</a></li>
                         <li><a href="#deferred" class="toc-link">9. Deferred Documents</a></li>
                         <li><a href="#batch-release" class="toc-link">10. Batch Release</a></li>
-                        <li><a href="#my-documents" class="toc-link">11. My Documents</a></li>
+                        <li><a href="#my-documents" class="toc-link">11. My DTS</a></li>
                         <li><a href="#my-section" class="toc-link">12. My Section</a></li>
                         <li><a href="#qr-codes" class="toc-link">13. QR Code Tracking</a></li>
                         <li><a href="#search" class="toc-link">14. Search</a></li>
@@ -218,12 +218,22 @@
                             </ul>
                         </li>
                         <li>Click <strong>Submit</strong>.</li>
+                        <li>You will be taken to a <strong>Submission Confirmation</strong> page showing your receipt with a <strong>Reference Number</strong> (e.g., GD-000042).</li>
+                        <li>Click <strong>Print Receipt</strong> to print or save the receipt for your records. Present the Reference Number when following up on your document.</li>
                     </ol>
+
+                    <div class="alert alert-info-custom">
+                        <iconify-icon icon="solar:info-circle-linear" class="icon"></iconify-icon>
+                        <div>
+                            <strong>Tip:</strong> Always keep your printed receipt or note down the Reference Number. You will need it when inquiring about the status of your submitted document.
+                        </div>
+                    </div>
 
                     <h5>For DTS Users (Accepting Guest Documents)</h5>
                     <ol>
                         <li>Navigate to <strong>Doc Tracking &gt; Guest Docs</strong> in the sidebar.</li>
                         <li>Review the list of submitted guest documents.</li>
+                        <li>Click <strong>View</strong> to see the full details of a guest document (submitter info, organization, document type, description, intended receiver, etc.) for verification before accepting.</li>
                         <li>Click <strong>Accept</strong> to accept the document into the tracking system. This assigns a tracking code.</li>
                         <li>Or click <strong>Delete</strong> to remove invalid submissions.</li>
                     </ol>
@@ -264,7 +274,15 @@
                     <ul>
                         <li><strong>Print QR Slip</strong> - Print a QR sticker to attach to the physical document</li>
                         <li><strong>Edit</strong> - Modify the document description or type</li>
-                        <li><strong>View Route History</strong> - See where the document has been routed</li>
+                        <li><strong>View Tracking History</strong> - See the full route history of the document, including:
+                            <ul>
+                                <li>From / To sections and users</li>
+                                <li>Route purpose</li>
+                                <li>Date forwarded and date accepted</li>
+                                <li>Accepting remarks and actions taken</li>
+                                <li>Date acted and end remarks</li>
+                            </ul>
+                        </li>
                     </ul>
                 </section>
 
@@ -284,6 +302,7 @@
                             <ul>
                                 <li><strong>Accept</strong> - Receive the document. It moves to Pending status.</li>
                                 <li><strong>Accept & File</strong> - Accept and immediately file/keep the document.</li>
+                                <li><strong>Send to Pigeonhole</strong> (Records Section only) - Accept and forward the document to a pigeonhole slot assigned to a specific section. This action is only available to sections designated as Records Management.</li>
                             </ul>
                         </li>
                     </ol>
@@ -406,8 +425,11 @@
                 <section id="my-documents" class="manual-section">
                     <h4 class="section-title">
                         <iconify-icon icon="hugeicons:invoice-03" class="icon"></iconify-icon>
-                        11. My Documents
+                        11. My DTS
                     </h4>
+                    <p>The <strong>My DTS</strong> dropdown in the sidebar contains personal document views and statistics.</p>
+
+                    <h5>My Documents</h5>
                     <p>View all documents you have personally created or submitted.</p>
                     <ol>
                         <li>Navigate to <strong>My DTS &gt; My Documents</strong>.</li>
@@ -421,6 +443,28 @@
                                 <li>Bottom Left - Small QR for the bottom-left corner</li>
                             </ul>
                         </li>
+                    </ol>
+
+                    <h5>Routed for Me</h5>
+                    <p>Shows all documents that have been specifically routed to you (by name) across all sections.</p>
+                    <ol>
+                        <li>Navigate to <strong>My DTS &gt; Routed for Me</strong>.</li>
+                        <li>The table shows the tracking code, document particulars, who sent it, the destination section, date forwarded, and current status (Received, Pending, or Forwarded).</li>
+                        <li>Click the tracking code to view the full document details.</li>
+                    </ol>
+
+                    <h5>Accepted by Me</h5>
+                    <p>Shows all documents that you have personally received/accepted.</p>
+                    <ol>
+                        <li>Navigate to <strong>My DTS &gt; Accepted by Me</strong>.</li>
+                        <li>The table shows the tracking code, document particulars, sender info, section, date accepted, and current status (Pending Action, Filed/Kept, Deferred, or Forwarded).</li>
+                    </ol>
+
+                    <h5>Stats Per Sections</h5>
+                    <p>An overview table showing document counts across all sections. Requires report management permission.</p>
+                    <ol>
+                        <li>Navigate to <strong>My DTS &gt; Stats Per Sections</strong>.</li>
+                        <li>The table shows each section's current count of Incoming, Received, Forwarded, Deferred, Guest Docs, and Parked documents.</li>
                     </ol>
                 </section>
 
@@ -487,11 +531,19 @@
 
                     <h5>Webcam QR Scanner</h5>
                     <ol>
-                        <li>Navigate to the webcam scanner page from the Dashboard.</li>
+                        <li>On the Dashboard, click the <strong>Scan with Camera</strong> button to activate your device camera.</li>
                         <li>Allow camera access when prompted.</li>
                         <li>Hold the document's QR code in front of the camera.</li>
                         <li>The system will read the code and process the receipt.</li>
                     </ol>
+
+                    <h5>QR Scan Security</h5>
+                    <p>The system enforces the following security rules when scanning documents:</p>
+                    <ul>
+                        <li><strong>Section Restriction</strong> - You can only receive documents that are forwarded to your section. Scanning a document intended for another section will show an error.</li>
+                        <li><strong>Duplicate Prevention</strong> - A document that has already been received cannot be scanned again. The system will display who received it and when.</li>
+                        <li><strong>No Active Route</strong> - Documents that have not been forwarded to any section cannot be received via QR scan.</li>
+                    </ul>
 
                     <h5>Printing QR Codes</h5>
                     <p>After creating a document, you can print QR stickers in various formats to attach to the physical document. Use the print options available on the document view page.</p>
@@ -584,6 +636,14 @@
                         <li>Add new types like Memorandum, Letter, Report, etc.</li>
                     </ul>
 
+                    <h5>Pigeonholes</h5>
+                    <ul>
+                        <li><strong>System Settings &gt; Pigeonholes</strong> - Manage pigeonhole slots used by the Records Section to route documents to specific sections.</li>
+                        <li>Each pigeonhole is assigned to a section and can be set as Active or Inactive.</li>
+                        <li>Records Section users will see a <strong>Send to Pigeonhole</strong> action on the Incoming-route page, allowing them to accept and forward a document to the pigeonhole's assigned section in one step.</li>
+                        <li>A pigeonhole cannot be deleted if it has documents pending pickup.</li>
+                    </ul>
+
                     <h5>DTS Settings</h5>
                     <ul>
                         <li><strong>System Settings &gt; DTS Settings</strong> - System-wide configuration:
@@ -594,6 +654,18 @@
                                 <li><strong>Auto-Park Settings</strong> - Enable/disable and set days for auto-parking</li>
                                 <li><strong>Logo Upload</strong> - Light and dark mode logos</li>
                                 <li><strong>Guest Document Form</strong> - Enable/disable guest submissions</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h5>Statistics</h5>
+                    <ul>
+                        <li><strong>System Settings &gt; Statistics</strong> - View detailed document statistics for any section in the system.</li>
+                        <li>Select a section from the dropdown to see:
+                            <ul>
+                                <li><strong>Document Status Summary</strong> - Current counts of Incoming, Received, Forwarded, Deferred, Guest Docs, Re-Entered, and Parked documents.</li>
+                                <li><strong>Documents Received</strong> - Time-based breakdown (Today, Yesterday, This Week, Last Week, This Month, Last Month, This Year, Last Year).</li>
+                                <li><strong>Documents Forwarded</strong> - Same time-based breakdown for forwarded documents.</li>
                             </ul>
                         </li>
                     </ul>

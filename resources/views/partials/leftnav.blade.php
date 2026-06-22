@@ -85,12 +85,12 @@
   </li>
 @endcan
 
-  <li class="dropdown">
+  <li class="dropdown {{ request()->routeIs('dts.my-documents', 'dts.routed-for-me', 'dts.accepted-by-me', 'dts.stats-per-section') ? 'open' : '' }}">
     <a href="javascript:void(0)">
       <iconify-icon icon="hugeicons:invoice-03" class="menu-icon"></iconify-icon>
-      <span>My DTS</span> 
+      <span>My DTS</span>
     </a>
-    <ul class="sidebar-submenu">
+    <ul class="sidebar-submenu" {!! request()->routeIs('dts.my-documents', 'dts.routed-for-me', 'dts.accepted-by-me', 'dts.stats-per-section') ? 'style="display:block;"' : '' !!}>
       <li>
         <a href="{{ route('dts.my-documents') }}" >
           <i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> My Documents
@@ -98,15 +98,15 @@
       </li>
       @can('dts_access')
       <li>
-        <a href="#m"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Routed for Me</a>
+        <a href="{{ route('dts.routed-for-me') }}"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Routed for Me</a>
       </li>
       <li>
-        <a href="#d"><i class="ri-circle-fill circle-icon text-success-600 w-auto"></i> Accepted by me</a>
+        <a href="{{ route('dts.accepted-by-me') }}"><i class="ri-circle-fill circle-icon text-success-600 w-auto"></i> Accepted by Me</a>
       </li>
       @endcan
       @can('dts_reports_mngt')
       <li>
-        <a href="#SP"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i> Stats Per Sections</a>
+        <a href="{{ route('dts.stats-per-section') }}"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i> Stats Per Sections</a>
       </li>
       @endcan
       
@@ -184,9 +184,15 @@
       </li>
 
       <li>
+        <a href="{{ route('admin.pigeonholes.index') }}"><i class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> Pigeonholes</a>
+      </li>
+      <li>
         <a href="{{ route('dts.system-settings.index') }}"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i> DTS Settings</a>
-      </li>    
-     
+      </li>
+      <li>
+        <a href="{{ route('admin.section-statistics.index') }}"><i class="ri-circle-fill circle-icon text-info-main w-auto"></i> Statistics</a>
+      </li>
+
     </ul>
   </li>
   @endcan

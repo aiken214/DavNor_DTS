@@ -83,8 +83,20 @@
                     <td class="align-middle">@dateDateTime($document->created_at) <br>
                        <small> {{ $document->actions_needed ?? 'N/A' }} </small>
                     </td>
-                    <td class="align-middle">                       
-                        <button class="btn btn-success btn-sm" 
+                    <td class="align-middle">
+                        <button class="btn btn-info btn-sm"
+                        data-bs-toggle="modal" data-bs-target="#viewGuestDocModal"
+                        data-guestdoc_id="{{ $document->id }}"
+                        data-submittedby="{{ $document->submittedby }}"
+                        data-organization="{{ $document->organization }}"
+                        data-doctype_desc="{{ $document->docType->description }}"
+                        data-description="{{ $document->doc_description }}"
+                        data-actions_needed="{{ $document->actions_needed }}"
+                        data-receiver_section="{{ $document->receiverSection->name ?? 'N/A' }}"
+                        data-intended_receiver="{{ $document->intendedReceiver->name ?? 'N/A' }}"
+                        data-created_at="{{ $document->created_at ? $document->created_at->format('M d, Y h:i A') : 'N/A' }}"
+                        >View</button>
+                        <button class="btn btn-success btn-sm"
                         data-bs-toggle="modal" data-bs-target="#acceptModal"
                         data-guestdoc_id="{{ $document->id }}"
                         data-from_section_name="{{ $document->fromSection->name ?? 'N/A' }}"
@@ -100,13 +112,66 @@
                         data-guestdoc_description="{{ $document->docType->description }} - {{ $document->doc_description }}"
                         data-doc_id="{{ $document->id }}">
                         Delete</button>
-
-                       
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- View Guest Document Modal -->
+<div class="modal fade" id="viewGuestDocModal" tabindex="-1" aria-labelledby="viewGuestDocModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewGuestDocModalLabel">Guest Document Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th style="width:35%">Reference No.</th>
+                        <td><strong class="text-danger-600" id="viewRefNo"></strong></td>
+                    </tr>
+                    <tr>
+                        <th>Submitted By</th>
+                        <td id="viewSubmittedBy"></td>
+                    </tr>
+                    <tr>
+                        <th>Organization</th>
+                        <td id="viewOrganization"></td>
+                    </tr>
+                    <tr>
+                        <th>Document Type</th>
+                        <td id="viewDocType"></td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td id="viewDescription"></td>
+                    </tr>
+                    <tr>
+                        <th>Actions Needed</th>
+                        <td id="viewActionsNeeded"></td>
+                    </tr>
+                    <tr>
+                        <th>Routed To Section</th>
+                        <td id="viewReceiverSection"></td>
+                    </tr>
+                    <tr>
+                        <th>Intended Receiver</th>
+                        <td id="viewIntendedReceiver"></td>
+                    </tr>
+                    <tr>
+                        <th>Date Submitted</th>
+                        <td id="viewCreatedAt"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -221,6 +286,23 @@
             ],
             order: [[0, 'desc']] 
         });
+    });
+</script>
+<script>
+    $('#viewGuestDocModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var id = button.data('guestdoc_id');
+        var refNo = 'GD-' + String(id).padStart(6, '0');
+        var modal = $(this);
+        modal.find('#viewRefNo').text(refNo);
+        modal.find('#viewSubmittedBy').text(button.data('submittedby'));
+        modal.find('#viewOrganization').text(button.data('organization') || 'N/A');
+        modal.find('#viewDocType').text(button.data('doctype_desc'));
+        modal.find('#viewDescription').text(button.data('description'));
+        modal.find('#viewActionsNeeded').text(button.data('actions_needed') || 'N/A');
+        modal.find('#viewReceiverSection').text(button.data('receiver_section'));
+        modal.find('#viewIntendedReceiver').text(button.data('intended_receiver'));
+        modal.find('#viewCreatedAt').text(button.data('created_at'));
     });
 </script>
 <script>
