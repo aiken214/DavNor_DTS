@@ -159,7 +159,12 @@ public function quickReceipt(Request $request){
             }
             else{
                 if($document->routeDateAccepted !=NULL){
-                    return redirect()->back()->with('error', 'This document has already been received by your section on ' . date('M d, Y h:i A', strtotime($document->routeDateAccepted)) . '.');
+                    $receiverName = '';
+                    if ($document->receiver_user_id) {
+                        $receiver = DB::table('users')->where('id', $document->receiver_user_id)->first();
+                        $receiverName = $receiver ? ' by ' . $receiver->name : '';
+                    }
+                    return redirect()->back()->with('error', 'This document has already been received' . $receiverName . ' on ' . date('M d, Y h:i A', strtotime($document->routeDateAccepted)) . '.');
                 }else{
                     // Accept the document Update the Route Date Accepted
                     $routeId=$document->latest_route_id;
@@ -192,8 +197,7 @@ public function quickReceipt(Request $request){
                                 ->where('id', $previousRouteId)
                                 ->update($dataForPrevRoute);
                             }
-                    // $message= "Case 3: Successfully Received : Prev SectionID : ".$prevSectionId;
-                    $message= "Document is accepted to your section successfully...";
+                    $message= "Document received successfully by " . Auth::user()->name . ".";
                 }
             }     
 
