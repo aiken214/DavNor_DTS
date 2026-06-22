@@ -77,22 +77,28 @@
                     </div>
                     <h6 class="fw-semibold mb-12">Quick Document Receiving</h6>
                     <p>
-                      Streamline document acceptance with QuickScan. Just scan a QR code to accept documents quickly and securely, reducing paperwork and processing time.
+                      Scan a QR code using a hardware scanner or your phone's camera to accept documents quickly.
                     </p>
-                    <label class="form-label">QR Code Scan</label>
+                    <label class="form-label">QR Code / Tracking Number</label>
                     <form action="{{ route('dts.quick-receipt') }}" method="post" id="qrcode-form">
                       @csrf
-                      <div class="input-group">
+                      <div class="input-group mb-12">
                         <span class="input-group-text bg-base">
                           <iconify-icon icon="ic:twotone-qrcode"></iconify-icon>
                         </span>
                         <input type="text" class="form-control flex-grow-1" name="doc_track" id="doc_track" autofocus>
                       </div>
                     </form>
+
+                    <button type="button" class="btn btn-success btn-sm w-100" id="toggleCameraBtn">
+                      <iconify-icon icon="mdi:camera" class="icon text-lg me-1"></iconify-icon>
+                      <span id="cameraBtnText">Scan with Camera</span>
+                    </button>
+                    <div id="dashboard-reader" class="mt-12" style="display:none;"></div>
                   </div>
                 </div>
 
-               
+
       <!--//End Card New -->    
           </div>
           <div class="col-sm-6">
@@ -132,20 +138,17 @@
     <div class="col-sm-6">
       <div class="card">
         <div class="card-body">
-          <h6 class="fw-semibold text-danger mb-6">QR scanning using webcam or mobile cam</h6>
+          <h6 class="fw-semibold text-primary mb-6">Dedicated QR Scanning Page</h6>
         <p>
-        You may also scan a QR code using your webcam. Just click the link button below to start scanning.
-
-        </p> 
-        <p>
-          <a href="{{ route('dts.webcam-qr-scan') }}" class="btn btn-success">Webcam Scanning Page</a>
-          
+          For continuous scanning sessions, use the dedicated scanning page with a larger camera view.
         </p>
-          
-          
+        <p>
+          <a href="{{ route('dts.webcam-qr-scan') }}" class="btn btn-success btn-sm">
+            <iconify-icon icon="mdi:qrcode-scan" class="icon me-1"></iconify-icon> Open Scanning Page
+          </a>
+        </p>
         </div>
       </div>
-     
     </div>
     <div class="col-sm-6">
       <div class="card">  
@@ -203,11 +206,56 @@
 
 @endsection
 @section('scripts')
-
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
   document.getElementById('doc_track').addEventListener('change', function() {
       document.getElementById('qrcode-form').submit();
   });
+
+  var html5QrCode = null;
+  var cameraRunning = false;
+
+  document.getElementById('toggleCameraBtn').addEventListener('click', function() {
+      var readerDiv = document.getElementById('dashboard-reader');
+      var btnText = document.getElementById('cameraBtnText');
+
+      if (cameraRunning) {
+          html5QrCode.stop().then(function() {
+              readerDiv.style.display = 'none';
+              readerDiv.innerHTML = '';
+              btnText.textContent = 'Scan with Camera';
+              cameraRunning = false;
+              html5QrCode = null;
+          });
+      } else {
+          readerDiv.style.display = 'block';
+          btnText.textContent = 'Stop Camera';
+          cameraRunning = true;
+
+          html5QrCode = new Html5Qrcode("dashboard-reader");
+          html5QrCode.start(
+              { facingMode: "environment" },
+              { fps: 10, qrbox: { width: 220, height: 220 } },
+              function(decodedText) {
+                  document.getElementById('doc_track').value = decodedText;
+                  html5QrCode.stop().then(function() {
+                      readerDiv.style.display = 'none';
+                      readerDiv.innerHTML = '';
+                      btnText.textContent = 'Scan with Camera';
+                      cameraRunning = false;
+                      html5QrCode = null;
+                      document.getElementById('qrcode-form').submit();
+                  });
+              },
+              function(errorMessage) {}
+          ).catch(function(err) {
+              readerDiv.innerHTML = '<div class="alert alert-warning mt-2 p-2 small">Camera access denied or unavailable. Make sure you are using HTTPS and allow camera permission.</div>';
+              btnText.textContent = 'Scan with Camera';
+              cameraRunning = false;
+              html5QrCode = null;
+          });
+      }
+  });
 </script>
-  
-  @endsection
+
+@endsection
