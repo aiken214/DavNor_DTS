@@ -67,7 +67,7 @@
             @endif
      @if($mySection != NULL)
 
-     @if(!isset($isSchoolPersonnel) || !$isSchoolPersonnel || $isDtsUser)
+     @if(!isset($isSchoolUser) || !$isSchoolUser)
      {{-- ==================== DTS USER DASHBOARD ==================== --}}
          <div class="row">
           <div class="col-sm-6">
@@ -415,7 +415,7 @@
 
 @endsection
 @section('scripts')
-@if(!isset($isSchoolPersonnel) || !$isSchoolPersonnel || $isDtsUser)
+@if(!isset($isSchoolUser) || !$isSchoolUser)
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
   document.getElementById('doc_track').addEventListener('change', function() {

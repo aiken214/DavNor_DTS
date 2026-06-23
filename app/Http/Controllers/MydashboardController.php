@@ -30,14 +30,14 @@ class MydashboardController extends Controller
                         ->get();
 
         $isDtsUser = Gate::allows('dts_access');
-        $isSchoolPersonnel = $assignedSection && $assignedSection->name === 'School Personnel Group';
+        $isSchoolUser = Auth::user()->roles->contains('id', 5);
 
-        if (!$isSchoolPersonnel || $isDtsUser) {
+        if (!$isSchoolUser) {
             $sectionReceivedCount = DB::table('section_received_counts')
                             ->where('section_id', Auth::user()->section_id)
                              ->first();
 
-            return view("dts.dts-dashboard", compact('mySection','assignedSection','myAllSections', 'sectionReceivedCount', 'systemSetting', 'isDtsUser', 'isSchoolPersonnel'));
+            return view("dts.dts-dashboard", compact('mySection','assignedSection','myAllSections', 'sectionReceivedCount', 'systemSetting', 'isDtsUser', 'isSchoolUser'));
         }
 
         $recentDocuments = DtsDocument::with(['docType', 'fromSection'])
@@ -70,7 +70,7 @@ class MydashboardController extends Controller
             ->count();
 
         return view("dts.dts-dashboard", compact(
-            'mySection', 'assignedSection', 'myAllSections', 'systemSetting', 'isDtsUser', 'isSchoolPersonnel',
+            'mySection', 'assignedSection', 'myAllSections', 'systemSetting', 'isDtsUser', 'isSchoolUser',
             'recentDocuments', 'routedToMe', 'myPending',
             'myDocumentCount', 'myIncomingCount', 'myPendingCount', 'myForwardedCount'
         ));
