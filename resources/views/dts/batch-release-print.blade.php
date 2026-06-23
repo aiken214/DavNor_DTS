@@ -82,6 +82,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th style="width:80px;">QR</th>
                 <th>Tracking Code</th>
                 <th>Description</th>
             </tr>
@@ -91,6 +92,7 @@
             @if(isset($forBatchReleasesDocuments) && count($forBatchReleasesDocuments) > 0)
             @foreach($forBatchReleasesDocuments as $document)
             <tr>
+            <td style="text-align:center;">{!! QrCode::size(50)->generate($document->tracking_code) !!}</td>
             <td>{{ $document->tracking_code }}</td>
             <td>{{ $document->description }}</td>
             </tr>
