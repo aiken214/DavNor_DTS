@@ -21,8 +21,10 @@ class GuestDocController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {    
+    {
        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+       $section = DtsSection::find(Auth::user()->section_id);
+       abort_if(!$section || !$section->is_record_management, Response::HTTP_FORBIDDEN, '403 Forbidden');
         $tableTitle="Guest Documents for receipt";
         $systemSetting =DtsSystemSetting::first();
         $mySection = NULL;

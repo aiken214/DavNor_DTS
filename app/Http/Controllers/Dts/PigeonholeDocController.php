@@ -21,6 +21,7 @@ class PigeonholeDocController extends Controller
         $systemSetting = DtsSystemSetting::first();
         $mySection = null;
         $assignedSection = DtsSection::where('id', Auth::user()->section_id)->first();
+        abort_if(!$assignedSection || !$assignedSection->is_record_management, Response::HTTP_FORBIDDEN, '403 Forbidden');
         if ($assignedSection) {
             $mySection = $assignedSection->name;
         }
@@ -48,6 +49,7 @@ class PigeonholeDocController extends Controller
         $systemSetting = DtsSystemSetting::first();
         $mySection = null;
         $assignedSection = DtsSection::where('id', Auth::user()->section_id)->first();
+        abort_if(!$assignedSection || !$assignedSection->is_record_management, Response::HTTP_FORBIDDEN, '403 Forbidden');
         if ($assignedSection) {
             $mySection = $assignedSection->name;
         }
