@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DtsDocRoute;
+use App\Models\DtsDocument;
 use App\Models\DtsSection;
 use App\Models\DtsSystemSetting;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,6 @@ use Gate;
 class MydashboardController extends Controller
 {
     public function index(){
-        // Retrieve the aggregated count data for the user's section
         $tableTitle="Dashboard";
         $mySection = NULL;
         $assignedSection=DtsSection::where('id', Auth::user()->section_id)->first();
@@ -28,15 +28,52 @@ class MydashboardController extends Controller
                         ->where('user_id', Auth::user()->id)
                         ->orderBy('name','asc')
                         ->get();
-      
 
-        $sectionReceivedCount = DB::table('section_received_counts')
-                        ->where('section_id', Auth::user()->section_id)
-                         ->first();
-      
+        $isDtsUser = Gate::allows('dts_access');
+        $isSchoolPersonnel = $assignedSection && $assignedSection->name === 'School Personnel Group';
 
-        return view("dts.dts-dashboard", compact('mySection','assignedSection','myAllSections', 'sectionReceivedCount', 'systemSetting'));
+        if (!$isSchoolPersonnel || $isDtsUser) {
+            $sectionReceivedCount = DB::table('section_received_counts')
+                            ->where('section_id', Auth::user()->section_id)
+                             ->first();
 
+            return view("dts.dts-dashboard", compact('mySection','assignedSection','myAllSections', 'sectionReceivedCount', 'systemSetting', 'isDtsUser', 'isSchoolPersonnel'));
+        }
+
+        $recentDocuments = DtsDocument::with(['docType', 'fromSection'])
+            ->where('fromuser_id', Auth::id())
+            ->orderBy('id', 'desc')
+            ->limit(10)
+            ->get();
+
+        $routedToMe = DtsDocRoute::with(['document', 'fromSection', 'fromUser', 'docType'])
+            ->where('for_user_id', Auth::id())
+            ->where('status_id', 1)
+            ->whereNull('date_accepted')
+            ->whereHas('document')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $myPending = DtsDocRoute::with(['document', 'fromSection', 'fromUser', 'docType'])
+            ->where('for_user_id', Auth::id())
+            ->where('status_id', 2)
+            ->whereHas('document')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $myDocumentCount = DtsDocument::where('fromuser_id', Auth::id())->count();
+        $myIncomingCount = $routedToMe->count();
+        $myPendingCount = $myPending->count();
+        $myForwardedCount = DtsDocRoute::where('from_user_id', Auth::id())
+            ->where('status_id', 6)
+            ->whereNull('deleted_at')
+            ->count();
+
+        return view("dts.dts-dashboard", compact(
+            'mySection', 'assignedSection', 'myAllSections', 'systemSetting', 'isDtsUser', 'isSchoolPersonnel',
+            'recentDocuments', 'routedToMe', 'myPending',
+            'myDocumentCount', 'myIncomingCount', 'myPendingCount', 'myForwardedCount'
+        ));
     }
 
     private function parkDocuments(){

@@ -40,6 +40,7 @@ class IncomingDocController extends Controller
         $documents = DtsDocRoute::with(['document', 'fromSection', 'fromUser'])
             ->where('for_section_id', Auth::user()->section_id)
             ->whereNull('date_accepted')
+            ->whereNull('pigeonhole_id')
             ->where('status_id', 1)
             ->orderBy('id', 'desc')
             ->paginate(1000);
