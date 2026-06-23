@@ -62,7 +62,7 @@
           <table id="dataTable" class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <!-- <th>ID</th> -->
                     <th>Name</th>                    
                     <th>Email</th>
                     <th>Role/s</th>
@@ -74,7 +74,7 @@
             <tbody>
                 @foreach($users as $user)
                     <tr>
-                        <td>{{ $user->id }}</td>
+                        <!-- <td>{{ $user->id }}</td> -->
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td> @foreach($user->roles as $key => $role)
