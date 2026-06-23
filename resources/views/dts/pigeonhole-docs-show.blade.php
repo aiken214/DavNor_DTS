@@ -33,7 +33,7 @@
         <table id="phDocsTable" class="table table-striped table-responsive w-100">
             <thead>
                 <tr>
-                    <th>Tracking Code</th>
+                    <th style="text-align: left;">Tracking Code</th>
                     <th>Description</th>
                     <th>From</th>
                     <th>Date Forwarded</th>
@@ -43,7 +43,7 @@
             <tbody>
                 @foreach($documents as $doc)
                 <tr>
-                    <td class="align-middle" style="min-width: 6rem;">
+                    <td class="align-middle" style="text-align: left; min-width: 6rem;">
                         <a href="{{ route('dts.document-view', $doc->document->id) }}">{{ $doc->document->tracking_code }}</a>
                     </td>
                     <td class="align-middle">{{ $doc->docType->description ?? '' }} - {{ $doc->document->description }}</td>
