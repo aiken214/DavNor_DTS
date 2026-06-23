@@ -132,7 +132,7 @@
                               data-phDocId="{{ $document->document->id }}"
                               data-phDoc_description="{{ $document->docType->description }} - {{ $document->document->description }}"
                               >
-                              <iconify-icon icon="mdi:mailbox-open-outline" class="me-1"></iconify-icon> Send to Pigeonhole</a></li>
+                              Send to Pigeonhole</a></li>
                             @endif
                         </ul>
                     </div>

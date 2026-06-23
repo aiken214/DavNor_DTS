@@ -1,5 +1,6 @@
 @php
     $isRecordSection = Auth::check() ? \App\Models\DtsSection::where('id', Auth::user()->section_id)->value('is_record_management') : false;
+    $isDtsAdmin = Auth::check() ? \Illuminate\Support\Facades\Gate::allows('dts_settings_access') : false;
 @endphp
 <button type="button" class="sidebar-close-btn">
   <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
@@ -22,7 +23,7 @@
   
   <li class="sidebar-menu-group-title">Doc Tracking</li>
 @can('dts_access')
-@if($isRecordSection)
+@if($isRecordSection || $isDtsAdmin)
 <li class="li-forbadge">
     <a href="{{ route('dts.guest-doc') }}">
         <iconify-icon icon="fluent:document-person-20-regular" class="menu-icon"></iconify-icon>
@@ -89,7 +90,7 @@
     </a>
   </li>
 @endcan
-  @if($isRecordSection)
+  @if($isRecordSection || $isDtsAdmin)
   <li class="li-forbadge">
     <a href="{{ route('dts.pigeonhole-docs.index') }}">
       <iconify-icon icon="mdi:mailbox-open-outline" class="menu-icon"></iconify-icon>

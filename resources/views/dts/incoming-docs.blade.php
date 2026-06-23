@@ -127,7 +127,7 @@
                                     data-phfrom="{{ $documentRoute->fromSection->name }} | {{ $documentRoute->fromUser->name }}"
                                     data-phdoc_id="{{ $documentRoute->document->id }}"
                                     >
-                                    <iconify-icon icon="mdi:mailbox-open-outline" class="me-1"></iconify-icon> Send to Pigeonhole</a>
+                                    Send to Pigeonhole</a>
                                   </li>
                                   @endif
                                 </ul>

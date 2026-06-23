@@ -24,7 +24,8 @@ class GuestDocController extends Controller
     {
        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
        $section = DtsSection::find(Auth::user()->section_id);
-       abort_if(!$section || !$section->is_record_management, Response::HTTP_FORBIDDEN, '403 Forbidden');
+       $isAdmin = Gate::allows('dts_settings_access');
+       abort_if(!$isAdmin && (!$section || !$section->is_record_management), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $tableTitle="Guest Documents for receipt";
         $systemSetting =DtsSystemSetting::first();
         $mySection = NULL;
