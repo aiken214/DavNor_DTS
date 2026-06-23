@@ -18,4 +18,9 @@ class DtsDocType extends Model
         'for_guest',
         'menu_sequence',
     ];
+
+    public function documents()
+    {
+        return $this->hasMany(DtsDocument::class, 'dts_doc_type_id');
+    }
 }
