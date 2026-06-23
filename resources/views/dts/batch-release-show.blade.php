@@ -119,7 +119,31 @@
                     @endif
                 </tbody>
                 </table>
- 
+
+                @if($pigeonholes->count() > 0 && $batchRelease->release_date == NULL)
+                <hr class="my-3">
+                <h6 class="fw-semibold">Pigeonhole Documents</h6>
+                <div class="mb-3">
+                    <select class="form-control" id="pigeonholeSelect">
+                        <option value="">-- Select Pigeonhole --</option>
+                        @foreach($pigeonholes as $ph)
+                            <option value="{{ $ph->id }}">{{ $ph->name }} — {{ $ph->section->name ?? 'N/A' }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <table id="pigeonholeDocsTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>TrackNo</th>
+                            <th>Description</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="pigeonholeDocsBody">
+                    </tbody>
+                </table>
+                @endif
+
             </div>
             <div class="col-sm-6">
                 <h6 class="fw-semibold">For Batch Release Documents</h6>
@@ -210,6 +234,47 @@
         $('#station-id').val(sectionId);
         $('#section-form').submit();
     }
+</script>
+<script>
+    $(document).ready(function() {
+        $('#pigeonholeSelect').change(function() {
+            var pigeonholeId = $(this).val();
+            var tbody = $('#pigeonholeDocsBody');
+            tbody.empty();
+
+            if (!pigeonholeId) return;
+
+            $.ajax({
+                url: "{{ url('dts/batch-releases-pigeonhole-docs') }}/" + pigeonholeId,
+                type: 'GET',
+                dataType: 'json',
+                success: function(docs) {
+                    if (docs.length === 0) {
+                        tbody.append('<tr><td colspan="3" class="text-center text-muted">No available documents in this pigeonhole</td></tr>');
+                        return;
+                    }
+                    $.each(docs, function(i, doc) {
+                        var row = '<tr>' +
+                            '<td>' + doc.tracking_code + '</td>' +
+                            '<td>' + doc.description + '</td>' +
+                            '<td>' +
+                                '<form action="{{ route('dts.batch-releases-add-item') }}" method="POST" style="display:inline;">' +
+                                    '@csrf' +
+                                    '<input type="hidden" name="doc_route_id" value="' + doc.route_id + '">' +
+                                    '<input type="hidden" name="batch_release_id" value="{{ $batchRelease->id }}">' +
+                                    '<button type="submit" class="btn btn-primary-400 btn-sm">Add</button>' +
+                                '</form>' +
+                            '</td>' +
+                            '</tr>';
+                        tbody.append(row);
+                    });
+                },
+                error: function() {
+                    tbody.append('<tr><td colspan="3" class="text-center text-danger">Failed to load documents</td></tr>');
+                }
+            });
+        });
+    });
 </script>
 
 @endsection

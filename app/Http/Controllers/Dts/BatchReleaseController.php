@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dts;
 use App\Http\Controllers\Controller;
 use App\Models\DtsBatchRelease;
 use App\Models\DtsDocRoute;
+use App\Models\DtsPigeonhole;
 use App\Models\DtsSection;
 use App\Models\DtsSystemSetting;
 use Illuminate\Http\Request;
@@ -94,7 +95,31 @@ class BatchReleaseController extends Controller
                         })
                         ->get();
    
-        return view('dts.batch-release-show', compact('systemSetting', 'mySection', 'myAllSections','batchRelease', 'forBatchRelease', 'receivedDocuments'));
+        $pigeonholes = DtsPigeonhole::with('section')->where('is_active', true)->orderBy('name')->get();
+
+        return view('dts.batch-release-show', compact('systemSetting', 'mySection', 'myAllSections','batchRelease', 'forBatchRelease', 'receivedDocuments', 'pigeonholes'));
+    }
+
+    public function pigeonholeDocs($pigeonholeId)
+    {
+        abort_if(Gate::denies('dts_batch_release_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $docs = DtsDocRoute::with(['document'])
+            ->where('pigeonhole_id', $pigeonholeId)
+            ->where('status_id', 1)
+            ->whereNotIn('id', function ($query) {
+                $query->select('doc_route_id')->from('dts_batch_release_doc_route');
+            })
+            ->get()
+            ->map(function ($doc) {
+                return [
+                    'route_id' => $doc->id,
+                    'tracking_code' => $doc->document->tracking_code,
+                    'description' => $doc->document->description,
+                ];
+            });
+
+        return response()->json($docs);
     }
 
     public function forPrintView($batchReleaseId)
@@ -122,8 +147,23 @@ class BatchReleaseController extends Controller
        return view('dts.batch-release-print', compact('mySection', 'myAllSections','batchRelease', 'forBatchReleasesDocuments', 'systemSetting'));
     }
 
+    public function update(Request $request, $id)
+    {
+        abort_if(Gate::denies('dts_batch_release_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string',
+        ]);
+        $batchRelease = DtsBatchRelease::findOrFail($id);
+        if ($batchRelease->releaseby_id !== null) {
+            return redirect()->back()->with('error', 'Cannot edit a released batch.');
+        }
+        $batchRelease->update($request->only(['name', 'description']));
+        return redirect()->back()->with('success', 'Batch updated successfully.');
+    }
+
     public function store(Request $request)
-    { 
+    {
         abort_if(Gate::denies('dts_batch_release_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         // Validate the request
         $request->validate([

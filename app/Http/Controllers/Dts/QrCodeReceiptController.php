@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dts;
 
 use App\Http\Controllers\Controller;
 use App\Models\DtsDocument;
+use App\Models\DtsGuestdocument;
 use FactoryCall;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -49,9 +50,20 @@ class QrCodeReceiptController extends Controller
         $validated = $request->validate([
             'doc_track' => 'required|string',
         ]);
-        $qrcode =$request->doc_track;
-        $result=DB::table('dts_documents')->where('tracking_code', $qrcode)->first();
-       
+        $qrcode = trim($request->doc_track);
+
+        if (str_starts_with(strtoupper($qrcode), 'GD-')) {
+            $guestId = (int) ltrim(substr($qrcode, 3), '0');
+            $guestDoc = DtsGuestdocument::find($guestId);
+            if ($guestDoc) {
+                session(['guest_document_id' => $guestDoc->id]);
+                return redirect()->route('dts.qr-guest-doc-result');
+            }
+            return redirect()->back()->with('error', 'Guest document not found');
+        }
+
+        $result = DB::table('dts_documents')->where('tracking_code', $qrcode)->first();
+
         if ($result) {
             session(['document_id' => $result->id]);
             return redirect()->route('dts.qr-search');
@@ -111,6 +123,34 @@ class QrCodeReceiptController extends Controller
         
     }
 
+
+    public function qrGuestDocResult()
+    {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $systemSetting = DtsSystemSetting::first();
+        $mySection = null;
+        $assignedSection = DtsSection::where('id', Auth::user()->section_id)->first();
+        if ($assignedSection) {
+            $mySection = $assignedSection->name;
+        }
+        $myAllSections = DB::table('section_user')
+            ->join('dts_sections', 'dts_sections.id', '=', 'section_user.section_id')
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('name', 'asc')
+            ->get();
+
+        $id = session('guest_document_id');
+        $guestDocument = DtsGuestdocument::with(['docType', 'receiverSection', 'intendedReceiver'])->find($id);
+
+        if (!$guestDocument) {
+            return redirect()->route('dts.webcam-qr-scan')->with('error', 'Guest document not found');
+        }
+
+        $refNo = 'GD-' . str_pad($guestDocument->id, 6, '0', STR_PAD_LEFT);
+
+        return view('dts.qr-guest-doc-result', compact('guestDocument', 'refNo', 'mySection', 'myAllSections', 'systemSetting'));
+    }
 
 public function quickReceipt(Request $request){   
     abort_if(Gate::denies('dts_route_receive'), Response::HTTP_FORBIDDEN, '403 Forbidden');

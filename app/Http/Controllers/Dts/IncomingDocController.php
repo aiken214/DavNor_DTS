@@ -44,10 +44,9 @@ class IncomingDocController extends Controller
             ->orderBy('id', 'desc')
             ->paginate(1000);
 
-        $isRecordSection = $assignedSection ? $assignedSection->is_record_management : false;
-        $pigeonholes = $isRecordSection ? DtsPigeonhole::with('section')->where('is_active', true)->orderBy('name')->get() : collect();
+        $pigeonholes = DtsPigeonhole::with('section')->where('is_active', true)->orderBy('name')->get();
 
-      return view("dts.incoming-docs", compact('tableTitle', 'mySection', 'documents', 'myAllSections', 'systemSetting', 'isRecordSection', 'pigeonholes'));
+      return view("dts.incoming-docs", compact('tableTitle', 'mySection', 'documents', 'myAllSections', 'systemSetting', 'pigeonholes'));
     }
 
 

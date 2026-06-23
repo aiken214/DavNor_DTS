@@ -84,6 +84,14 @@
     </a>
   </li>
 @endcan
+  @can('dts_access')
+  <li class="li-forbadge">
+    <a href="{{ route('dts.pigeonhole-docs.index') }}">
+      <iconify-icon icon="mdi:mailbox-open-outline" class="menu-icon"></iconify-icon>
+      <span>Pigeonholes</span>
+    </a>
+  </li>
+  @endcan
 
   <li class="dropdown {{ request()->routeIs('dts.my-documents', 'dts.routed-for-me', 'dts.accepted-by-me', 'dts.stats-per-section') ? 'open' : '' }}">
     <a href="javascript:void(0)">

@@ -70,7 +70,14 @@ public function docView($docId){
                 ->get();
     $latestRoute = DtsDocRoute::where('dts_document_id', $docId)->orderBy('id', 'desc')->first();
 
-    return view('dts.show-document', compact('document','docRoutes', 'mySection', 'myAllSections','assignedSection','qrCodes', 'systemSetting', 'docTypes', 'latestRoute'));
+    $sections = DtsSection::select('id', 'name')
+        ->where('id', '>', 1)
+        ->where('category_id', 1)
+        ->where('is_dropdown', true)
+        ->orderBy('name')
+        ->get();
+
+    return view('dts.show-document', compact('document','docRoutes', 'mySection', 'myAllSections','assignedSection','qrCodes', 'systemSetting', 'docTypes', 'latestRoute', 'sections'));
 
 }
     public function sectionStat(){
@@ -331,8 +338,15 @@ public function getUsersBySection($sectionId)
                     ->where('dts_document_id', $docId)
                     ->get();
         $latestRoute = DtsDocRoute::where('dts_document_id', $docId)->orderBy('id', 'desc')->first();
-    
-        return view('dts.show-document', compact('document','docRoutes', 'mySection', 'myAllSections','assignedSection','qrCodes', 'systemSetting', 'docTypes', 'latestRoute'));
+
+        $sections = DtsSection::select('id', 'name')
+            ->where('id', '>', 1)
+            ->where('category_id', 1)
+            ->where('is_dropdown', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('dts.show-document', compact('document','docRoutes', 'mySection', 'myAllSections','assignedSection','qrCodes', 'systemSetting', 'docTypes', 'latestRoute', 'sections'));
     }
 
     /**
@@ -396,5 +410,46 @@ public function updateDocument(Request $request)
     public function destroy(DtsDocument $dtsDocument)
     {
         //
+    }
+
+    public function reEntry(Request $request)
+    {
+        abort_if(Gate::denies('dts_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $validated = $request->validate([
+            'document_id' => 'required|exists:dts_documents,id',
+            'previous_route_id' => 'required|exists:dts_doc_routes,id',
+            'for_section_id' => 'required|exists:dts_sections,id',
+            'for_user_id' => 'required|exists:users,id',
+            'route_purpose' => 'required|string|max:255',
+        ]);
+
+        try {
+            DB::transaction(function () use ($validated) {
+                $previousRoute = DtsDocRoute::findOrFail($validated['previous_route_id']);
+                $previousRoute->update([
+                    'end_remarks' => ($previousRoute->end_remarks ? $previousRoute->end_remarks . ' | ' : '') . 'Re-entered into system',
+                ]);
+
+                DtsDocRoute::create([
+                    'dts_document_id' => $validated['document_id'],
+                    'previous_route_id' => $validated['previous_route_id'],
+                    'from_user_id' => Auth::id(),
+                    'from_section_id' => Auth::user()->section_id,
+                    'for_section_id' => $validated['for_section_id'],
+                    'for_user_id' => $validated['for_user_id'],
+                    'date_forwarded' => now(),
+                    'status_id' => 1,
+                    'route_purpose' => 'Re-entry: ' . $validated['route_purpose'],
+                ]);
+            });
+
+            return redirect()->route('dts.document-view', $validated['document_id'])
+                ->with('success', 'Document re-entered into the system successfully.');
+
+        } catch (\Exception $e) {
+            Log::error('Failed to re-enter document: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred during re-entry.');
+        }
     }
 }

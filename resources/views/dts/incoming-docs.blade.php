@@ -117,7 +117,7 @@
                                      data-adfdoc_id ="{{ $documentRoute->document->id }}"
                                      >
                                     Accept and File </a></li>
-                                  @if(isset($isRecordSection) && $isRecordSection && $pigeonholes->count() > 0)
+                                  @if($pigeonholes->count() > 0)
                                   <li><hr class="dropdown-divider"></li>
                                   <li>
                                     <a class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900" href="javascript:void(0)"
@@ -131,7 +131,7 @@
                                   </li>
                                   @endif
                                 </ul>
-                            </div>
+                            </div> 
                             
                         
                         </td>
@@ -265,7 +265,7 @@
   </div>
 <!--//AcceptFile Modal -->
 
-@if(isset($isRecordSection) && $isRecordSection && $pigeonholes->count() > 0)
+@if($pigeonholes->count() > 0)
 <!--Send to Pigeonhole Modal -->
 <div class="modal fade" id="sendToPigeonholeModal" tabindex="-1" aria-labelledby="sendToPigeonholeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

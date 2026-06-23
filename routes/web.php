@@ -28,6 +28,7 @@ use App\Http\Controllers\Dts\MyDocumentController;
 use App\Http\Controllers\Dts\MyStationController;
 use App\Http\Controllers\Dts\ParkedRoutesController;
 use App\Http\Controllers\Dts\KeptDocumentController;
+use App\Http\Controllers\Dts\PigeonholeDocController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -120,6 +121,7 @@ Route::group(['prefix' => 'dts', 'as' => 'dts.', 'namespace' => 'Dts', 'middlewa
     Route::patch('/documents/{dtsDocument}', [DocumentController::class, 'update'])->name('documents.update');
     Route::delete('/documents/{dtsDocument}', [DocumentController::class, 'destroy'])->name('documents.destroy');    
     Route::get('/get-users-by-section/{id}', [DocumentController::class, 'getUsersBySection']);
+    Route::post('/document-re-entry', [DocumentController::class, 'reEntry'])->name('document-re-entry');
 
     Route::get('/incoming-docs', [IncomingDocController::class, 'index'])->name('incoming-docs.index');
     Route::post('/incoming-docs/accept', [IncomingDocController::class, 'acceptDoc'])->name('incomingdoc-accept');
@@ -132,6 +134,7 @@ Route::group(['prefix' => 'dts', 'as' => 'dts.', 'namespace' => 'Dts', 'middlewa
     Route::post('/quick-receipt', [QrCodeReceiptController::class, 'quickReceipt'])->name('quick-receipt');
     Route::get('/webcam-qr-scan', [QrCodeReceiptController::class, 'webcamScan'])->name('webcam-qr-scan');
     Route::get('/qr-search', [QrCodeReceiptController::class, 'qrSearch'])->name('qr-search');
+    Route::get('/qr-guest-doc-result', [QrCodeReceiptController::class, 'qrGuestDocResult'])->name('qr-guest-doc-result');
    
 
     Route::get('/forwarded-docs', [ForwardedDocController::class, 'index'])->name('forwarded-docs.index');
@@ -143,7 +146,11 @@ Route::group(['prefix' => 'dts', 'as' => 'dts.', 'namespace' => 'Dts', 'middlewa
     Route::post('/received-docs/file-kept',[ReceivedDocController::class, 'fileKept'])->name('received-docs.file-kept');
     Route::post('/received-docs/file-released',[ReceivedDocController::class, 'fileReleased'])->name('received-docs.file-released');
     Route::post('/received-docs/deferred-doc',[ReceivedDocController::class, 'deferredDoc'])->name('received-docs.deferred-doc');
-    
+    Route::post('/received-docs/send-to-pigeonhole',[ReceivedDocController::class, 'sendToPigeonhole'])->name('received-docs.send-to-pigeonhole');
+
+    Route::get('/pigeonhole-docs', [PigeonholeDocController::class, 'index'])->name('pigeonhole-docs.index');
+    Route::get('/pigeonhole-docs/{id}', [PigeonholeDocController::class, 'show'])->name('pigeonhole-docs.show');
+
     Route::get('/system-settings', [SystemSettingController::class, 'index'])->name('system-settings.index');
     Route::get('/system-settings/{dtsSystemSetting}/edit', [SystemSettingController::class, 'edit'])->name('system-settings.edit');
     Route::patch('/system-settings/{dtsSystemSetting}', [SystemSettingController::class, 'update'])->name('system-settings.update');
@@ -161,10 +168,12 @@ Route::group(['prefix' => 'dts', 'as' => 'dts.', 'namespace' => 'Dts', 'middlewa
     Route::post('/deferred-docs/file-released',[DeferredDocController::class, 'fileReleased'])->name('deferred-docs.file-released');
     // --- batch release
     Route::post('/batch-releases-add-item', [BatchReleaseController::class, 'addOneItemforRelease'])->name('batch-releases-add-item');
+    Route::get('/batch-releases-pigeonhole-docs/{pigeonholeId}', [BatchReleaseController::class, 'pigeonholeDocs'])->name('batch-releases-pigeonhole-docs');
     Route::get('/batch-releases-for-print-view/{docId}', [BatchReleaseController::class, 'forPrintView'])->name('batch-releases-for-print-view');
     Route::post('/batch-releases-remove-item', [BatchReleaseController::class, 'removeOneItemforRelease'])->name('batch-releases-remove-item');
     Route::post('/batch-releases-release-docs', [BatchReleaseController::class, 'releaseDocs'])->name('batch-releases-release-docs');
     Route::post('/batch-releases-store', [BatchReleaseController::class, 'store'])->name('batch-releases.store');
+    Route::put('/batch-releases-update/{id}', [BatchReleaseController::class, 'update'])->name('batch-releases.update');
     Route::get('/batch-releases', [BatchReleaseController::class, 'index'])->name('batch-releases.index');
     Route::get('/batch-releases-show/{dtsBatchRelease}', [BatchReleaseController::class, 'show'])->name('batch-releases.show');
     //-- Barcode Printing
