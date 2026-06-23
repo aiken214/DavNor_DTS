@@ -96,8 +96,15 @@ class DocTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DtsDocType $dtsDocType)
+    public function destroy(DtsDocType $dtsDocTypes)
     {
-        //
+        abort_if(Gate::denies('dts_doctype_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        if ($dtsDocTypes->documents()->count() > 0) {
+            return redirect()->route('dts.doc-types.index')->with('error', 'Cannot delete this document type because it has associated documents.');
+        }
+
+        $dtsDocTypes->delete();
+        return redirect()->route('dts.doc-types.index')->with('success', 'Document Type deleted successfully');
     }
 }

@@ -35,15 +35,17 @@
 </li>
 @endif
 
+@can('dts_incoming_access')
 <li class="li-forbadge">
     <a href="{{ route('dts.incoming-docs.index') }}">
         <iconify-icon icon="fluent:document-search-20-regular" class="menu-icon"></iconify-icon>
-        <span>Incoming-route</span> 
+        <span>Incoming-route</span>
         <span class="badge-container">
             <span id="incoming-doc-badge" class="badge-right green"></span>
         </span>
     </a>
 </li>
+@endcan
 
 <li class="li-forbadge">
     <a href="{{ route('dts.received-docs.index') }}">

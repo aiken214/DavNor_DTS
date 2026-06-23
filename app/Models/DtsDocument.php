@@ -39,26 +39,20 @@ class DtsDocument extends Model
     public static function generateTrackingCode()
     {
         $now = Carbon::now();
-        $monthYear = $now->format('my'); // e.g., "0724"
-        
-        // Fetch the highest issued_num for the current month and year
-        $lastDocument = self::where('mo_yr', $monthYear)
+        $year = $now->format('y'); // e.g., "26"
+
+        $lastDocument = self::where('mo_yr', $year)
                             ->orderBy('issued_num', 'desc')
                             ->first();
 
-        $code = self::getSystemSettingCode();
-        $padding = self::getSystemPadding();
         $newSequence = $lastDocument ? $lastDocument->issued_num + 1 : 1;
-        
-        // Pad the sequence number with leading zeros to make it 5 digits
-        $sequencePadded = str_pad($newSequence, $padding, '0', STR_PAD_LEFT);
-        
-        // Combine month-year, system setting code, and sequence to form the new tracking code
-        $trackingCode = $monthYear . $code . $sequencePadded;
-        
+        $sequencePadded = str_pad($newSequence, 6, '0', STR_PAD_LEFT);
+
+        $trackingCode = $year . '-' . $sequencePadded;
+
         return [
             'tracking_code' => $trackingCode,
-            'mo_yr' => $monthYear,
+            'mo_yr' => $year,
             'issued_num' => $newSequence
         ];
     }
