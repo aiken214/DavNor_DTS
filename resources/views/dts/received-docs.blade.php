@@ -69,7 +69,7 @@
         <table id="receivedDocsTable" class="table table-striped table-responsive w-100">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th style="text-align: left;">Tracking Code</th>
                     <th class="description-column">Description</th>
                     <th>Date</th>
                     <th>From</th>
@@ -82,7 +82,7 @@
             <tbody>
                 @foreach($documents as $document)
                 <tr>
-                    <td class="align-middle" style="min-width: 6rem;"> <a href="{{ route('dts.document-view', $document->document->id) }}">{{ $document->document->tracking_code }}</a></td>
+                    <td class="align-middle" style="text-align: left; min-width: 6rem;"> <a href="{{ route('dts.document-view', $document->document->id) }}">{{ $document->document->tracking_code }}</a></td>
                     <td class="align-middle">{{ $document->docType->description }} - {{ $document->document->description }}</td>
                    <td>{{ $document->date_accepted }}</td>
                     <td class="align-middle"> {{ $document->fromSection->name ?? 'N/A' }} <br>
@@ -429,6 +429,7 @@
           responsive: true,
           autoWidth: false, // Prevent auto-calculation of width by DataTables
           columnDefs: [
+              { width: '12%', targets: 0 },
               { width: '35%', targets: 1 }, // Set the width of the description column
               { visible: false, targets: 2 } // Hide the third column (index 2)
           ],

@@ -72,7 +72,7 @@
             <table  id="mydataTable" class="table table-striped">
             <thead>
                 <tr>
-                    <th style="text-align: left;">Tracking</th>
+                    <th style="text-align: left;">Tracking Code</th>
                     <th>Particulars</th>
                     <th>From</th>                  
                     <th>Date Forwarded</th>
@@ -354,7 +354,7 @@
             responsive: true,
             autoWidth: false, // Prevent auto-calculation of width by DataTables
             columnDefs: [
-                { width: '13ch', targets: 0 },
+                { width: '12%', targets: 0 },
                 { width: '35%', targets: 1 } // Set the width of the description column
             ],
             "pageLength": 25,

@@ -68,8 +68,8 @@
         <table id="receivedDocsTable" class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th style="text-align: left;">Tracking</th>
+                    <!-- <th>ID</th> -->
+                    <th style="text-align: left;">Tracking Code</th>
                     <th>Particulars</th>
                     <th>For</th>                  
                     <th>Date Forwarded</th>
@@ -79,9 +79,9 @@
             <tbody>
                 @foreach($documents as $documentRoute)
                     <tr>
-                        <td><a href="{{ route('dts.documents.show', $documentRoute->document->id) }}">
+                        <!-- <td><a href="{{ route('dts.documents.show', $documentRoute->document->id) }}">
                             {{ $documentRoute->id  }}
-                        </a>
+                        </a> -->
                         </td>
                         <td class="align-middle" style="text-align: left !important; min-width: 6rem;">
                             <a href="{{ route('dts.documents.show', $documentRoute->document->id) }}">
@@ -244,8 +244,8 @@
             responsive: true,
             autoWidth: false,
             columnDefs: [
-                { width: '13ch', targets: 1 },
-                { width: '35%', targets: 2 }
+                { width: '12%', targets: 0 },
+                { width: '35%', targets: 1 }
             ],
             order: [[0, 'desc']]
         });
