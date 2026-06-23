@@ -1,3 +1,6 @@
+@php
+    $isRecordSection = Auth::check() ? \App\Models\DtsSection::where('id', Auth::user()->section_id)->value('is_record_management') : false;
+@endphp
 <button type="button" class="sidebar-close-btn">
   <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
 </button>
@@ -19,6 +22,7 @@
   
   <li class="sidebar-menu-group-title">Doc Tracking</li>
 @can('dts_access')
+@if($isRecordSection)
 <li class="li-forbadge">
     <a href="{{ route('dts.guest-doc') }}">
         <iconify-icon icon="fluent:document-person-20-regular" class="menu-icon"></iconify-icon>
@@ -28,6 +32,7 @@
         </span>
     </a>
 </li>
+@endif
 
 <li class="li-forbadge">
     <a href="{{ route('dts.incoming-docs.index') }}">
@@ -84,14 +89,14 @@
     </a>
   </li>
 @endcan
-  @can('dts_access')
+  @if($isRecordSection)
   <li class="li-forbadge">
     <a href="{{ route('dts.pigeonhole-docs.index') }}">
       <iconify-icon icon="mdi:mailbox-open-outline" class="menu-icon"></iconify-icon>
       <span>Pigeonholes</span>
     </a>
   </li>
-  @endcan
+  @endif
 
   <li class="dropdown {{ request()->routeIs('dts.my-documents', 'dts.routed-for-me', 'dts.accepted-by-me', 'dts.stats-per-section') ? 'open' : '' }}">
     <a href="javascript:void(0)">
