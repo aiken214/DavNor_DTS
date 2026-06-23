@@ -8,6 +8,7 @@ use App\Models\DtsDocType;
 use App\Models\DtsGuestdocument;
 use App\Models\User;
 use App\Models\DtsSystemSetting;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
 
@@ -64,7 +65,10 @@ class GuestDtsController extends Controller
 
         $guestDocument = DtsGuestdocument::with(['docType', 'receiverSection', 'intendedReceiver'])->findOrFail($id);
 
-        return view('guest-dts-confirmation', compact('guestDocument'));
+        $refNo = 'GD-' . str_pad($guestDocument->id, 6, '0', STR_PAD_LEFT);
+        $qrCode = QrCode::size(150)->style('round')->generate($refNo);
+
+        return view('guest-dts-confirmation', compact('guestDocument', 'qrCode', 'refNo'));
     }
 
     public function getUserBySecId($sectionId)

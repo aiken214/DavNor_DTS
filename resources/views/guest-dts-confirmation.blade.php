@@ -39,14 +39,14 @@
             <div class="card print-area" id="printArea">
                 <div class="card-header text-center">
                     <h5 class="card-title mb-0">Guest Document Submission Receipt</h5>
-                    <small class="text-secondary-light">Reference No: <strong class="text-danger-600">GD-{{ str_pad($guestDocument->id, 6, '0', STR_PAD_LEFT) }}</strong></small>
+                    <small class="text-secondary-light">Reference No: <strong class="text-danger-600">{{ $refNo }}</strong></small>
                 </div>
                 <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div style="display:inline-block;">{!! $qrCode !!}</div>
+                        <div class="mt-1"><strong class="text-danger-600" style="font-size:1.3rem">{{ $refNo }}</strong></div>
+                    </div>
                     <table class="table table-borderless mb-0">
-                        <tr>
-                            <th style="width:40%">Reference No.</th>
-                            <td><strong class="text-danger-600" style="font-size:1.3rem">GD-{{ str_pad($guestDocument->id, 6, '0', STR_PAD_LEFT) }}</strong></td>
-                        </tr>
                         <tr>
                             <th>Submitted By</th>
                             <td>{{ $guestDocument->submittedby }}</td>
@@ -92,7 +92,7 @@
                     </table>
                     <hr>
                     <p class="text-center text-secondary-light text-sm mb-0">
-                        Please keep this receipt for your records. Present the Reference No. <strong>GD-{{ str_pad($guestDocument->id, 6, '0', STR_PAD_LEFT) }}</strong> when following up.
+                        Please keep this receipt for your records. Present the Reference No. <strong>{{ $refNo }}</strong> when following up.
                     </p>
                 </div>
             </div>
