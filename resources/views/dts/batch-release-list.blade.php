@@ -109,15 +109,14 @@
                         @endif
                      </td>
                      <td>
-                        <a href="{{ route('dts.batch-releases.show', $batch->id) }}" class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center">
-                            <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
-                          </a>
+                        <a href="{{ route('dts.batch-releases.show', $batch->id) }}" class="btn btn-info btn-sm">View</a>
                           @if($batch->releaseby_id == NULL)
-                          <a href="javascript:void(0)" class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center">
-                            <iconify-icon icon="lucide:edit"></iconify-icon>
-                          </a>
+                          <a href="javascript:void(0)" class="btn btn-success btn-sm"
+                            data-bs-toggle="modal" data-bs-target="#editBatchReleaseModal"
+                            data-batch-id="{{ $batch->id }}"
+                            data-batch-name="{{ $batch->name }}"
+                            data-batch-description="{{ $batch->description }}">Edit</a>
                           @endif
-                         
                      </td>
                 </tr>
               @endforeach
@@ -159,6 +158,36 @@
 
 
 
+<!-- Edit Batch Release Modal -->
+<div class="modal fade" id="editBatchReleaseModal" tabindex="-1" aria-labelledby="editBatchReleaseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editBatchReleaseModalLabel">Edit Batch Release</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editBatchForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-3">
+                        <label for="editBatchName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="editBatchName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editBatchDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editBatchDescription" name="description" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('styles')
@@ -186,15 +215,25 @@
     $(document).ready(function() {
         $('#batchListTable').DataTable({
             responsive: true,
-            autoWidth: false, // Prevent auto-calculation of width by DataTables
-            // columnDefs: [
-            //         { width: '18%', targets: 2 }
-            // ],
+            autoWidth: false,
             order: [[0, 'desc']]
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var editModal = document.getElementById('editBatchReleaseModal');
+        editModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var batchId = button.getAttribute('data-batch-id');
+            var batchName = button.getAttribute('data-batch-name');
+            var batchDescription = button.getAttribute('data-batch-description');
 
-
-
+            var form = editModal.querySelector('#editBatchForm');
+            form.action = "{{ url('dts/batch-releases-update') }}/" + batchId;
+            editModal.querySelector('#editBatchName').value = batchName;
+            editModal.querySelector('#editBatchDescription').value = batchDescription;
+        });
+    });
+</script>
 @endsection

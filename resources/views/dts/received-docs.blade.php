@@ -124,6 +124,16 @@
                             data-doc_description="{{ $document->docType->description }} - {{ $document->document->description }}"
                               >
                              Defer for a while</a></li>
+                            @if($pigeonholes->count() > 0)
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900" href="javascript:void(0)"
+                              data-bs-toggle="modal" data-bs-target="#sendToPigeonholeModal"
+                              data-phRouteId="{{ $document->id }}"
+                              data-phDocId="{{ $document->document->id }}"
+                              data-phDoc_description="{{ $document->docType->description }} - {{ $document->document->description }}"
+                              >
+                              <iconify-icon icon="mdi:mailbox-open-outline" class="me-1"></iconify-icon> Send to Pigeonhole</a></li>
+                            @endif
                         </ul>
                     </div>
                     </td>
@@ -336,6 +346,58 @@
   </div>
 </div>
 
+@if($pigeonholes->count() > 0)
+<!-- Send to Pigeonhole Modal -->
+<div class="modal fade" id="sendToPigeonholeModal" tabindex="-1" aria-labelledby="sendToPigeonholeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form action="{{ route('dts.received-docs.send-to-pigeonhole') }}" method="post">
+        @csrf
+        <div class="modal-header">
+          <h6 class="modal-title" id="sendToPigeonholeModalLabel">Send Document to Pigeonhole</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label">Document Description</label>
+            <div class="col-sm-9">
+              <textarea class="form-control" id="phPendingDocDesc" cols="30" rows="2" readonly></textarea>
+            </div>
+          </div>
+          <input type="hidden" name="route_id" id="phPendingRouteId">
+          <input type="hidden" name="dts_document_id" id="phPendingDocumentId">
+          <div class="mb-3 row">
+            <label for="phPendingPigeonholeId" class="col-sm-3 col-form-label">Pigeonhole</label>
+            <div class="col-sm-9">
+              <select class="form-control" id="phPendingPigeonholeId" name="pigeonhole_id" required>
+                <option value="">-- Select Pigeonhole --</option>
+                @foreach($pigeonholes as $pigeonhole)
+                  <option value="{{ $pigeonhole->id }}">{{ $pigeonhole->name }} — {{ $pigeonhole->section->name ?? 'N/A' }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="phPendingRemarks" class="col-sm-3 col-form-label">Remarks (optional)</label>
+            <div class="col-sm-9">
+              <input class="form-control" type="text" name="remarks" id="phPendingRemarks">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <div class="col-sm-3">Processed By</div>
+            <div class="col-sm-9">{{ Auth::user()->name }}</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Send to Pigeonhole</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+@endif
+
 {{-- End modals --}}
 
 @endsection
@@ -495,6 +557,20 @@ if (forwardDocModal) {
           return new bootstrap.Toast(toastEl)
       })
       toastList.forEach(toast => toast.show())
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var phModal = document.getElementById('sendToPigeonholeModal');
+    if (phModal) {
+      phModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var modal = this;
+        modal.querySelector('#phPendingRouteId').value = button.getAttribute('data-phRouteId');
+        modal.querySelector('#phPendingDocumentId').value = button.getAttribute('data-phDocId');
+        modal.querySelector('#phPendingDocDesc').value = button.getAttribute('data-phDoc_description');
+      });
+    }
   });
 </script>
 @endsection

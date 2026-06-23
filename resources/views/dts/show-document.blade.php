@@ -254,7 +254,25 @@
              </div>
 
           </div>
-             <!-- Button for Accept--> 
+             <!-- Button for Accept-->
+        @endif
+
+        @if(isset($latestRoute) && $latestRoute != NULL && $latestRoute->for_section_id == Auth::user()->section_id && in_array($latestRoute->status_id, [4, 3]))
+        <!-- Re-entry Button -->
+        <div class="row mt-20">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Re-entry Document</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">This document has been {{ $latestRoute->status_id == 4 ? 'released' : 'filed' }}. If corrections were made and the document is re-submitted, use Re-entry to route it back into the system. The tracking number and QR code will be retained.</p>
+                    <button class="btn btn-warning radius-8 px-20 py-11" data-bs-toggle="modal" data-bs-target="#reEntryModal" style="width:100%">
+                        <iconify-icon icon="mdi:file-restore-outline" class="me-1"></iconify-icon> Re-entry Document
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- End Re-entry Button -->
         @endif
 
         </div>
@@ -320,6 +338,91 @@
 
 <!--End modals-->
 
+@if(isset($latestRoute) && $latestRoute != NULL && $latestRoute->for_section_id == Auth::user()->section_id && in_array($latestRoute->status_id, [4, 3]))
+<!-- Re-entry Modal -->
+<div class="modal fade" id="reEntryModal" tabindex="-1" aria-labelledby="reEntryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content radius-16 bg-base">
+            <div class="modal-header py-16 px-24 border border-top-0 border-start-0 border-end-0">
+                <h6 class="modal-title" id="reEntryModalLabel">Re-entry Document: {{ $document->tracking_code }}</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-24">
+                <form action="{{ route('dts.document-re-entry') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="document_id" value="{{ $document->id }}">
+                    <input type="hidden" name="previous_route_id" value="{{ $latestRoute->id }}">
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Tracking No.</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" value="{{ $document->tracking_code }}" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Re-entry Reason</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="route_purpose" placeholder="e.g. Corrections made, re-submitted" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Route To Section</label>
+                        <div class="col-sm-9">
+                            <select name="for_section_id" id="reEntrySectionId" class="form-control" required>
+                                <option value="">Select Section</option>
+                                @foreach($sections as $section)
+                                    <option value="{{ $section->id }}">{{ $section->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Personnel</label>
+                        <div class="col-sm-9">
+                            <select name="for_user_id" id="reEntryUserId" class="form-control" required>
+                                <option value="">Select Personnel</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Re-entered By</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center gap-3 mt-24">
+                        <button type="button" class="btn btn-secondary px-40 py-11" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-warning px-48 py-12">Re-entry Document</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 
 @endsection
 
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        var baseUrl = "{{ url('/') }}";
+        $('#reEntrySectionId').change(function() {
+            var sectionId = $(this).val();
+            var userDropdown = $('#reEntryUserId');
+            userDropdown.empty().append('<option value="">Select Personnel</option>');
+            if (sectionId) {
+                $.ajax({
+                    url: baseUrl + '/dts/get-users-by-section/' + sectionId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $.each(data, function(index, user) {
+                            userDropdown.append($('<option>').val(user.id).text(user.name));
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+@endsection
