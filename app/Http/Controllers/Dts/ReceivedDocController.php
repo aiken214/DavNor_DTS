@@ -44,6 +44,7 @@ class ReceivedDocController extends Controller
                            ->get();
         $documents = DtsDocRoute::with(['document', 'fromSection', 'fromUser'])
         ->where('for_section_id', Auth::user()->section_id)
+        ->whereNull('pigeonhole_id')
         ->where('status_id', 2)
         ->paginate(1000);
 
