@@ -64,7 +64,7 @@
         <table id="receivedDocsTable" class="table table-striped table-responsive w-100">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Code</th>
                     <th class="description-column">Description</th>
                     <th>From</th>
                     <th>Created /Route Purpose</th>
@@ -75,7 +75,7 @@
             <tbody>
                 @foreach($documents as $document)
                 <tr>
-                    <td class="align-middle" style="min-width: 6rem;"> <a href="{{ route('dts.documents.show', $document->id) }}">{{ $document->id }}</a></td>
+                    <td class="align-middle" style="min-width: 6rem;"> <a href="{{ route('dts.documents.show', $document->id) }}">GD-{{ str_pad($document->id, 5, '0', STR_PAD_LEFT) }}</a></td>
                     <td class="align-middle">{{ $document->docType->description }} - {{ $document->doc_description }}</td>
                     <td class="align-middle"> {{ $document->fromSection->name ?? 'N/A' }} <br>
                      <small> {{ $document->submittedby ?? 'N/A' }}  </small>

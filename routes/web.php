@@ -30,6 +30,7 @@ use App\Http\Controllers\Dts\ParkedRoutesController;
 use App\Http\Controllers\Dts\KeptDocumentController;
 use App\Http\Controllers\Dts\PigeonholeDocController;
 use App\Http\Controllers\Dts\MyPigeonholeController;
+use App\Http\Controllers\Dts\BatchSubmitController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -156,6 +157,15 @@ Route::group(['prefix' => 'dts', 'as' => 'dts.', 'namespace' => 'Dts', 'middlewa
 
     Route::get('/my-pigeonhole', [MyPigeonholeController::class, 'index'])->name('my-pigeonhole');
     Route::post('/my-pigeonhole/re-entry', [MyPigeonholeController::class, 'reEntry'])->name('my-pigeonhole.re-entry');
+
+    Route::get('/batch-submits', [BatchSubmitController::class, 'index'])->name('batch-submits.index');
+    Route::post('/batch-submits-store', [BatchSubmitController::class, 'store'])->name('batch-submits.store');
+    Route::put('/batch-submits-update/{id}', [BatchSubmitController::class, 'update'])->name('batch-submits.update');
+    Route::get('/batch-submits-show/{dtsBatchSubmit}', [BatchSubmitController::class, 'show'])->name('batch-submits.show');
+    Route::post('/batch-submits-add-doc', [BatchSubmitController::class, 'addDocument'])->name('batch-submits-add-doc');
+    Route::post('/batch-submits-remove-doc', [BatchSubmitController::class, 'removeDocument'])->name('batch-submits-remove-doc');
+    Route::post('/batch-submits-finalize', [BatchSubmitController::class, 'finalize'])->name('batch-submits-finalize');
+    Route::get('/batch-submits-for-print-view/{batchSubmitId}', [BatchSubmitController::class, 'forPrintView'])->name('batch-submits-for-print-view');
 
     Route::get('/system-settings', [SystemSettingController::class, 'index'])->name('system-settings.index');
     Route::get('/system-settings/{dtsSystemSetting}/edit', [SystemSettingController::class, 'edit'])->name('system-settings.edit');

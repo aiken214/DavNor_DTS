@@ -40,7 +40,9 @@ class RoleController extends Controller
         foreach ($permissions as $permission) {
             $title = $permission->title;
 
-            if (str_starts_with($title, 'dts_batch_release')) {
+            if (str_starts_with($title, 'dts_batch_submit')) {
+                $group = 'DTS Batch Submit';
+            } elseif (str_starts_with($title, 'dts_batch_release')) {
                 $group = 'DTS Batch Release';
             } elseif (str_starts_with($title, 'dts_doctype')) {
                 $group = 'DTS Doc Types';

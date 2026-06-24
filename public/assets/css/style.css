@@ -13613,7 +13613,7 @@ td.fc-header-center {
 }
 
 .sidebar-logo img {
-  max-height: 3.4375rem;
+  max-height: 6rem;
 }
 
 .sidebar-logo img.dark-logo {
@@ -13622,6 +13622,7 @@ td.fc-header-center {
 
 .sidebar-logo img.logo-icon {
   display: none;
+  max-height: 3.5rem;
 }
 
 .sidebar-menu-area {

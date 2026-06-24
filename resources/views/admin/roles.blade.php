@@ -59,7 +59,7 @@
         <table id="dataTable" class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th style="display: none;">ID</th>
                     <th style="width:15%;"> Role </th>
                     <th>Permissions</th>
                     <th style="width:15%;">Action</th>

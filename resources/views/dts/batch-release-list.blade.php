@@ -74,7 +74,7 @@
         <table id="batchListTable" class="table table-striped table-responsive w-100">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Code</th>
                     <th>Name</th>
                     <th class="description-column">Description</th>
                     
@@ -86,7 +86,7 @@
             <tbody>
                 @foreach($batchReleases as $batch)
                 <tr>
-                   <td>{{ $batch->id }}</td>
+                   <td>{{ $batch->batch_code }}</td>
                    <td>{{ $batch->name }}</td>
                    <td>{{ $batch->description }}</td>
                      

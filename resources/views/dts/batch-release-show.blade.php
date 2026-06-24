@@ -72,7 +72,7 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-sm-8">Batch Name: <span>{{ $batchRelease->name }} | Batch Description: {{ $batchRelease->description }} | Release to: {{ $batchRelease->receiver_name }}</div>
+            <div class="col-sm-8"><strong>{{ $batchRelease->batch_code }}</strong> | Batch Name: {{ $batchRelease->name }} | Description: {{ $batchRelease->description }} | Release to: {{ $batchRelease->receiver_name }}</div>
             <div class="col-sm-4 text-end"> 
                 @if($batchRelease->releaseby_id == NULL)
                 <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#releaseModal">Release To</button>
