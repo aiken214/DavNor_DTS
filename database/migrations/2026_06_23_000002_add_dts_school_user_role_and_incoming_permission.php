@@ -39,7 +39,7 @@ return new class extends Migration
             ->toArray();
 
         foreach ($dtsUserPermissions as $permissionId) {
-            if ($permissionId == 75) {
+            if (in_array($permissionId, [48, 49, 75])) {
                 continue;
             }
             DB::table('permission_role')->insert([

@@ -101,8 +101,17 @@
                             @endforeach
                         </select>
                     </div>
-                   
-        
+
+                    <div class="mb-3">
+                        <label for="pigeonhole_id" class="form-label">Assigned Pigeonhole (Optional)</label>
+                        <select class="form-control" id="pigeonhole_id" name="pigeonhole_id">
+                            <option value="">-- None --</option>
+                            @foreach($pigeonholes as $pigeonhole)
+                                <option value="{{ $pigeonhole->id }}" {{ $user->pigeonhole_id == $pigeonhole->id ? 'selected' : '' }}>{{ $pigeonhole->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password" name="password">

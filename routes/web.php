@@ -29,6 +29,7 @@ use App\Http\Controllers\Dts\MyStationController;
 use App\Http\Controllers\Dts\ParkedRoutesController;
 use App\Http\Controllers\Dts\KeptDocumentController;
 use App\Http\Controllers\Dts\PigeonholeDocController;
+use App\Http\Controllers\Dts\MyPigeonholeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -150,6 +151,11 @@ Route::group(['prefix' => 'dts', 'as' => 'dts.', 'namespace' => 'Dts', 'middlewa
 
     Route::get('/pigeonhole-docs', [PigeonholeDocController::class, 'index'])->name('pigeonhole-docs.index');
     Route::get('/pigeonhole-docs/{id}', [PigeonholeDocController::class, 'show'])->name('pigeonhole-docs.show');
+    Route::post('/pigeonhole-docs/release', [PigeonholeDocController::class, 'release'])->name('pigeonhole-docs.release');
+    Route::post('/pigeonhole-docs/cancel', [PigeonholeDocController::class, 'cancel'])->name('pigeonhole-docs.cancel');
+
+    Route::get('/my-pigeonhole', [MyPigeonholeController::class, 'index'])->name('my-pigeonhole');
+    Route::post('/my-pigeonhole/re-entry', [MyPigeonholeController::class, 'reEntry'])->name('my-pigeonhole.re-entry');
 
     Route::get('/system-settings', [SystemSettingController::class, 'index'])->name('system-settings.index');
     Route::get('/system-settings/{dtsSystemSetting}/edit', [SystemSettingController::class, 'edit'])->name('system-settings.edit');

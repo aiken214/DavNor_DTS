@@ -262,6 +262,7 @@
                                     '@csrf' +
                                     '<input type="hidden" name="doc_route_id" value="' + doc.route_id + '">' +
                                     '<input type="hidden" name="batch_release_id" value="{{ $batchRelease->id }}">' +
+                                    '<input type="hidden" name="pigeonhole_id" value="' + pigeonholeId + '">' +
                                     '<button type="submit" class="btn btn-primary-400 btn-sm">Add</button>' +
                                 '</form>' +
                             '</td>' +
@@ -274,6 +275,12 @@
                 }
             });
         });
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var savedPigeonholeId = urlParams.get('pigeonhole_id');
+        if (savedPigeonholeId) {
+            $('#pigeonholeSelect').val(savedPigeonholeId).trigger('change');
+        }
     });
 </script>
 

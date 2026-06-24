@@ -229,45 +229,43 @@ class BatchReleaseController extends Controller
 public function addOneItemforRelease(Request $request){
 
         abort_if(Gate::denies('dts_batch_release_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        // Validate the request
         $request->validate([
             'doc_route_id' => 'required|exists:dts_doc_routes,id',
             'batch_release_id' => 'required|exists:dts_batch_releases,id',
         ]);
-         // Use a transaction to ensure all operations succeed or fail together
     DB::transaction(function () use ($request) {
-        // update  route status to 11 (for batch release)
         $docRoute = DtsDocRoute::findOrFail($request->input('doc_route_id'));
         $docRoute->update(['status_id' => 11]);
-        // user insert to pivot table using query builder
             DB::table('dts_batch_release_doc_route')->insert([
             'batch_release_id' => $request->input('batch_release_id'),
             'doc_route_id' => $request->input('doc_route_id'),
             'created_at' => now(),
         ]);
     });
-      
-    return redirect()->back()->with('success', 'Document is included successfully.');
+
+    $redirectUrl = route('dts.batch-releases.show', $request->input('batch_release_id'));
+    if ($request->input('pigeonhole_id')) {
+        $redirectUrl .= '?pigeonhole_id=' . $request->input('pigeonhole_id');
+    }
+    return redirect($redirectUrl)->with('success', 'Document is included successfully.');
 
 }
 
 public function removeOneItemforRelease(Request $request){
         abort_if(Gate::denies('dts_batch_release_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        // Validate the request
         $request->validate([
             'id' => 'required|exists:dts_batch_release_doc_route,id',
             'doc_route_id' => 'required|exists:dts_doc_routes,id',
         ]);
         DB::transaction(function () use ($request) {
-        // update  route status to 2 (received)
         $docRoute = DtsDocRoute::findOrFail($request->input('doc_route_id'));
-        $docRoute->update(['status_id' => 2]);
-        // user insert to pivot table using query builder
+        $restoreStatus = $docRoute->pigeonhole_id ? 1 : 2;
+        $docRoute->update(['status_id' => $restoreStatus]);
         DB::table('dts_batch_release_doc_route')
             ->where('id', $request->input('id'))
             ->delete();
         });
-      
+
     return redirect()->back()->with('success', 'Document is removed successfully.');
 }
 

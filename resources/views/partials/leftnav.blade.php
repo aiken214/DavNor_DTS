@@ -1,6 +1,7 @@
 @php
     $isRecordSection = Auth::check() ? \App\Models\DtsSection::where('id', Auth::user()->section_id)->value('is_record_management') : false;
     $isDtsAdmin = Auth::check() ? \Illuminate\Support\Facades\Gate::allows('dts_settings_access') : false;
+    $userPigeonhole = Auth::check() ? Auth::user()->pigeonhole_id : null;
 @endphp
 <button type="button" class="sidebar-close-btn">
   <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
@@ -67,15 +68,17 @@
     </a>
 </li>
   
+@can('dts_route_defer_access')
 <li class="li-forbadge">
   <a href="{{ route('dts.deferred-docs.index') }}">
       <iconify-icon icon="material-symbols:map-outline" class="menu-icon"></iconify-icon>
-      <span>Deferred</span> 
+      <span>Deferred</span>
       <span class="badge-container">
           <span id="deferred-doc-badge" class="badge-right red" style="display: none;"></span>
       </span>
   </a>
 </li>
+@endcan
 
   <li  class="li-forbadge">
     <a href="{{ route('dts.documents.create-forward') }}">
@@ -97,6 +100,14 @@
     <a href="{{ route('dts.pigeonhole-docs.index') }}">
       <iconify-icon icon="mdi:mailbox-open-outline" class="menu-icon"></iconify-icon>
       <span>Pigeonholes</span>
+    </a>
+  </li>
+  @endif
+  @if($userPigeonhole)
+  <li class="li-forbadge">
+    <a href="{{ route('dts.my-pigeonhole') }}">
+      <iconify-icon icon="mdi:mailbox-open-outline" class="menu-icon"></iconify-icon>
+      <span>My Pigeonhole</span>
     </a>
   </li>
   @endif
