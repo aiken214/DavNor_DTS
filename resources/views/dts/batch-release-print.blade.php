@@ -74,7 +74,15 @@
     <div class="card-body">
        <div id="forPrint" class="card">
     <div class="card-header">
-        <h6 class="card-title">Batch: <span>{{ $batchRelease->name }} </span> </h6>
+        <div class="d-flex flex-column align-items-center mb-3">
+            <div class="d-flex" style="padding-bottom: 8px;"><img src="{{ asset('assets/images/DepEd_Seal.png') }}" alt="" width="75px" height="75px"></div>
+            <div class="d-flex oldenglish" style="font-size: 16px"> Republic of the Philippines </div>
+            <div class="d-flex oldenglish" style="font-size: 18px"> Department of Education </div>
+            <div class="d-flex trajan" style="padding-top: 8px"> Region XI </div>
+            <div class="d-flex trajan" style="font-weight: 600"> Schools Division of Davao del Norte </div>
+        </div>
+        <hr>
+        <h6 class="card-title">Batch: <span>{{ $batchRelease->batch_code }} — {{ $batchRelease->name }} </span> </h6>
        <div>Description: {{ $batchRelease->description }} </div> 
        <div style="margin-bottom: 10px;">Release Date:  {{  $batchRelease->release_date ?? '' }}</div> 
 

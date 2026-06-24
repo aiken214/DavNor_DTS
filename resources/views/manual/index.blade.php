@@ -38,14 +38,16 @@
                         <li><a href="#forwarding" class="toc-link">8. Forwarding Documents</a></li>
                         <li><a href="#deferred" class="toc-link">9. Deferred Documents</a></li>
                         <li><a href="#batch-release" class="toc-link">10. Batch Release</a></li>
-                        <li><a href="#my-documents" class="toc-link">11. My DTS</a></li>
-                        <li><a href="#my-section" class="toc-link">12. My Section</a></li>
-                        <li><a href="#qr-codes" class="toc-link">13. QR Code Tracking</a></li>
-                        <li><a href="#search" class="toc-link">14. Search</a></li>
-                        <li><a href="#profile" class="toc-link">15. Profile Settings</a></li>
-                        <li><a href="#admin" class="toc-link">16. Administration</a></li>
-                        <li><a href="#statuses" class="toc-link">17. Status Reference</a></li>
-                        <li><a href="#faq" class="toc-link">18. FAQ</a></li>
+                        <li><a href="#batch-submit" class="toc-link">11. Batch Submit</a></li>
+                        <li><a href="#my-pigeonhole" class="toc-link">12. My Pigeonhole</a></li>
+                        <li><a href="#my-documents" class="toc-link">13. My DTS</a></li>
+                        <li><a href="#my-section" class="toc-link">14. My Section</a></li>
+                        <li><a href="#qr-codes" class="toc-link">15. QR Code Tracking</a></li>
+                        <li><a href="#search" class="toc-link">16. Search</a></li>
+                        <li><a href="#profile" class="toc-link">17. Profile Settings</a></li>
+                        <li><a href="#admin" class="toc-link">18. Administration</a></li>
+                        <li><a href="#statuses" class="toc-link">19. Status Reference</a></li>
+                        <li><a href="#faq" class="toc-link">20. FAQ</a></li>
                     </ul>
                 </nav>
             </div>
@@ -421,11 +423,95 @@
 
                 <hr class="section-divider">
 
-                {{-- 11. My Documents --}}
+                {{-- 11. Batch Submit --}}
+                <section id="batch-submit" class="manual-section">
+                    <h4 class="section-title">
+                        <iconify-icon icon="mdi:file-send-outline" class="icon"></iconify-icon>
+                        11. Batch Submit (School Users)
+                    </h4>
+                    <p>Batch Submit allows DTS School Users to create and submit multiple new documents to the Records Section in one batch. Each document automatically receives a tracking code and QR code, and a transmittal slip can be printed for record-keeping.</p>
+
+                    <h5>Creating a Batch</h5>
+                    <ol>
+                        <li>Navigate to <strong>Batch Submit</strong> in the sidebar.</li>
+                        <li>Click <strong>New Batch</strong>.</li>
+                        <li>Enter a <strong>Name</strong> (e.g., "June 2026 Submissions") and optional <strong>Description</strong>.</li>
+                        <li>Click <strong>Create</strong>. A batch code (e.g., <code>BS-00001</code>) is automatically generated.</li>
+                    </ol>
+
+                    <h5>Adding Documents to a Batch</h5>
+                    <ol>
+                        <li>Open the batch by clicking <strong>View</strong>.</li>
+                        <li>On the left side, fill in the <strong>Add Document</strong> form:
+                            <ul>
+                                <li><strong>Doc Type</strong> - Select the document type (e.g., Memorandum, Letter, Report)</li>
+                                <li><strong>Description</strong> - Brief description of the document</li>
+                                <li><strong>Actions Needed / Purpose</strong> - What action is needed (e.g., For approval, For signature)</li>
+                            </ul>
+                        </li>
+                        <li>Click <strong>Add Document</strong>. A tracking code is automatically generated for the document.</li>
+                        <li>The document appears on the right side under <strong>Documents in This Batch</strong>.</li>
+                        <li>Repeat for each document you need to submit.</li>
+                    </ol>
+
+                    <div class="alert alert-info-custom">
+                        <iconify-icon icon="solar:info-circle-linear" class="icon"></iconify-icon>
+                        <div>
+                            <strong>Note:</strong> Each document added to the batch is immediately routed to the Records Section as "Incoming." The batch serves as a grouping mechanism for printing a transmittal slip.
+                        </div>
+                    </div>
+
+                    <h5>Removing Documents</h5>
+                    <p>If you added a document by mistake, click the <strong>Remove</strong> button next to it in the documents table. This deletes the document and its route. You can only remove documents while the batch is still in Draft status.</p>
+
+                    <h5>Submitting the Batch</h5>
+                    <ol>
+                        <li>Once all documents are added, click <strong>Submit Batch</strong>.</li>
+                        <li>A confirmation dialog will show the number of documents. Click <strong>Confirm Submit</strong>.</li>
+                        <li>The batch status changes from <strong>Draft</strong> to <strong>Submitted</strong>. No further edits are allowed.</li>
+                    </ol>
+
+                    <h5>Printing the Transmittal</h5>
+                    <ol>
+                        <li>Click <strong>Print View</strong> to open the printable transmittal.</li>
+                        <li>The transmittal includes the DepEd header, batch information, and a table of all documents with their <strong>QR codes</strong> and tracking codes.</li>
+                        <li>Click <strong>Print</strong> to print the transmittal slip. Attach it to the physical documents when submitting to the Records Section.</li>
+                    </ol>
+                </section>
+
+                <hr class="section-divider">
+
+                {{-- 12. My Pigeonhole --}}
+                <section id="my-pigeonhole" class="manual-section">
+                    <h4 class="section-title">
+                        <iconify-icon icon="mdi:mailbox-open-outline" class="icon"></iconify-icon>
+                        12. My Pigeonhole
+                    </h4>
+                    <p>If your section has an assigned pigeonhole, you can view and manage documents that the Records Section has placed in your pigeonhole for pickup/release.</p>
+
+                    <h5>Viewing Pigeonhole Documents</h5>
+                    <ol>
+                        <li>Navigate to <strong>My Pigeonhole</strong> in the sidebar (only visible if your section has an assigned pigeonhole).</li>
+                        <li>The table shows documents currently in your pigeonhole with status <strong>For Release</strong> or <strong>Released</strong>.</li>
+                        <li>The <strong>Remarks</strong> column shows any custom remarks added during the release process (e.g., the name of the person who picked up the document).</li>
+                    </ol>
+
+                    <h5>Re-entering a Document</h5>
+                    <p>If a released document needs to be routed back into the system (e.g., it needs further action):</p>
+                    <ol>
+                        <li>Click <strong>Re-entry</strong> next to the released document.</li>
+                        <li>The document will be re-routed to the Records Section as a new incoming document.</li>
+                        <li>Once re-entered, the document is removed from your pigeonhole view.</li>
+                    </ol>
+                </section>
+
+                <hr class="section-divider">
+
+                {{-- 13. My Documents --}}
                 <section id="my-documents" class="manual-section">
                     <h4 class="section-title">
                         <iconify-icon icon="hugeicons:invoice-03" class="icon"></iconify-icon>
-                        11. My DTS
+                        13. My DTS
                     </h4>
                     <p>The <strong>My DTS</strong> dropdown in the sidebar contains personal document views and statistics.</p>
 
@@ -470,11 +556,11 @@
 
                 <hr class="section-divider">
 
-                {{-- 12. My Section --}}
+                {{-- 14. My Section --}}
                 <section id="my-section" class="manual-section">
                     <h4 class="section-title">
                         <iconify-icon icon="stash:section-divider" class="icon"></iconify-icon>
-                        12. My Section
+                        14. My Section
                     </h4>
                     <p>View statistics and document history for your entire section.</p>
 
@@ -514,11 +600,11 @@
 
                 <hr class="section-divider">
 
-                {{-- 13. QR Code Tracking --}}
+                {{-- 15. QR Code Tracking --}}
                 <section id="qr-codes" class="manual-section">
                     <h4 class="section-title">
                         <iconify-icon icon="mdi:qrcode-scan" class="icon"></iconify-icon>
-                        13. QR Code Tracking
+                        15. QR Code Tracking
                     </h4>
                     <p>The QR Code system provides a fast way to receive documents or look up their status.</p>
 
@@ -551,11 +637,11 @@
 
                 <hr class="section-divider">
 
-                {{-- 14. Search --}}
+                {{-- 16. Search --}}
                 <section id="search" class="manual-section">
                     <h4 class="section-title">
                         <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
-                        14. Searching Documents
+                        16. Searching Documents
                     </h4>
                     <ol>
                         <li>Use the <strong>Search bar</strong> in the top navbar.</li>
@@ -574,11 +660,11 @@
 
                 <hr class="section-divider">
 
-                {{-- 15. Profile Settings --}}
+                {{-- 17. Profile Settings --}}
                 <section id="profile" class="manual-section">
                     <h4 class="section-title">
                         <iconify-icon icon="solar:user-linear" class="icon"></iconify-icon>
-                        15. Profile Settings
+                        17. Profile Settings
                     </h4>
                     <p>Manage your account information and password.</p>
 
@@ -601,11 +687,11 @@
 
                 <hr class="section-divider">
 
-                {{-- 16. Administration --}}
+                {{-- 18. Administration --}}
                 <section id="admin" class="manual-section">
                     <h4 class="section-title">
                         <iconify-icon icon="icon-park-outline:setting-two" class="icon"></iconify-icon>
-                        16. Administration
+                        18. Administration
                     </h4>
                     <p>These features are only available to users with administrator roles.</p>
 
@@ -676,11 +762,11 @@
 
                 <hr class="section-divider">
 
-                {{-- 17. Status Reference --}}
+                {{-- 19. Status Reference --}}
                 <section id="statuses" class="manual-section">
                     <h4 class="section-title">
                         <iconify-icon icon="solar:list-check-linear" class="icon"></iconify-icon>
-                        17. Document Status Reference
+                        19. Document Status Reference
                     </h4>
 
                     <div class="info-table">
@@ -750,11 +836,11 @@
 
                 <hr class="section-divider">
 
-                {{-- 18. FAQ --}}
+                {{-- 20. FAQ --}}
                 <section id="faq" class="manual-section">
                     <h4 class="section-title">
                         <iconify-icon icon="solar:question-circle-linear" class="icon"></iconify-icon>
-                        18. Frequently Asked Questions
+                        20. Frequently Asked Questions
                     </h4>
 
                     <div class="accordion" id="faqAccordion">

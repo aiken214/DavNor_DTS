@@ -57,7 +57,7 @@
         <table id="pigeonholesTable" class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th style="display: none;">ID</th>
                     <th>Name</th>
                     <th>Assigned Section</th>
                     <th>Description</th>
@@ -68,7 +68,7 @@
             <tbody>
                 @foreach($pigeonholes as $pigeonhole)
                     <tr>
-                        <td>{{ $pigeonhole->id }}</td>
+                        <td style="display: none;">{{ $pigeonhole->id }}</td>
                         <td><strong>{{ $pigeonhole->name }}</strong></td>
                         <td>{{ $pigeonhole->section->name ?? 'N/A' }}</td>
                         <td>{{ $pigeonhole->description ?? '-' }}</td>

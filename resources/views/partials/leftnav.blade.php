@@ -2,6 +2,7 @@
     $isRecordSection = Auth::check() ? \App\Models\DtsSection::where('id', Auth::user()->section_id)->value('is_record_management') : false;
     $isDtsAdmin = Auth::check() ? \Illuminate\Support\Facades\Gate::allows('dts_settings_access') : false;
     $userPigeonhole = Auth::check() ? Auth::user()->pigeonhole_id : null;
+    $isSchoolUser = Auth::check() ? Auth::user()->roles->contains('id', 5) : false;
 @endphp
 <button type="button" class="sidebar-close-btn">
   <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
@@ -111,6 +112,14 @@
     </a>
   </li>
   @endif
+  @can('dts_batch_submit_access')
+  <li class="li-forbadge">
+    <a href="{{ route('dts.batch-submits.index') }}">
+      <iconify-icon icon="mdi:file-send-outline" class="menu-icon"></iconify-icon>
+      <span>Batch Submit</span>
+    </a>
+  </li>
+  @endcan
 
   <li class="dropdown {{ request()->routeIs('dts.my-documents', 'dts.routed-for-me', 'dts.accepted-by-me', 'dts.stats-per-section') ? 'open' : '' }}">
     <a href="javascript:void(0)">
@@ -124,12 +133,14 @@
         </a>
       </li>
       @can('dts_access')
+      @if(!$isSchoolUser)
       <li>
         <a href="{{ route('dts.routed-for-me') }}"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Routed for Me</a>
       </li>
       <li>
         <a href="{{ route('dts.accepted-by-me') }}"><i class="ri-circle-fill circle-icon text-success-600 w-auto"></i> Accepted by Me</a>
       </li>
+      @endif
       @endcan
       @can('dts_reports_mngt')
       <li>
@@ -142,13 +153,14 @@
  
 
   @can('dts_access')
+  @if(!$isSchoolUser)
   <li class="dropdown">
     <a href="javascript:void(0)">
       <iconify-icon icon="stash:section-divider" class="menu-icon"></iconify-icon>
-      <span>My Section</span> 
+      <span>My Section</span>
     </a>
     <ul class="sidebar-submenu">
-      
+
       <li>
         <a href="{{ route('dts.my-station') }}"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> DTS Statisiics</a>
       </li>
@@ -164,9 +176,10 @@
     <li>
       <a href="{{ route('dts.deffered-parked') }}"><i class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> Parked Deferred Documents</a>
     </li>
-      
+
     </ul>
   </li>
+  @endif
   @endcan
   @can('user_access')
   <li class="sidebar-menu-group-title">Application</li>

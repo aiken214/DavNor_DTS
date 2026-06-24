@@ -1,0 +1,79 @@
+/* Training Certificate CSS */
+
+
+@font-face {
+    font-family: "Old English Text MT";
+    src: url("//db.onlinewebfonts.com/t/f3258385782c4c96aa24fe8b5d5f9782.eot");
+    src: url("//db.onlinewebfonts.com/t/f3258385782c4c96aa24fe8b5d5f9782.eot?#iefix")
+            format("embedded-opentype"),
+        url("//db.onlinewebfonts.com/t/f3258385782c4c96aa24fe8b5d5f9782.woff2")
+            format("woff2"),
+        url("//db.onlinewebfonts.com/t/f3258385782c4c96aa24fe8b5d5f9782.woff")
+            format("woff"),
+        url("//db.onlinewebfonts.com/t/f3258385782c4c96aa24fe8b5d5f9782.ttf")
+            format("truetype"),
+        url("//db.onlinewebfonts.com/t/f3258385782c4c96aa24fe8b5d5f9782.svg#Old English Text MT")
+            format("svg");
+
+}
+
+.myfont {
+    font-family: "Old English Text MT";
+    font-size: 36px;
+}
+
+
+.oldenglish {
+    font-family: "Old English Text MT";
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 600;
+    line-height: 16px;
+}
+
+.certText {
+    font-family: "Bookman Old Style";
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+blockquote {
+    font-family: "Bookman Old Style";
+    font-size: 21px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 30px;
+}
+pre {
+    font-family: "Bookman Old Style";
+    font-size: 13px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 18.5714px;
+}
+
+.trajan {
+
+    font-family: trajan-pro-3, serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    /* line-height: 16px; */
+}
+
+.d-flex { 
+    display: flex;  
+    justify-content: center;
+    text-align: center;
+}
+
+
+
+/* End of Training Certificate CSS */
+
+
+
