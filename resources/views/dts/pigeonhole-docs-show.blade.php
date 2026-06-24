@@ -67,7 +67,8 @@
                             <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#releaseModal{{ $doc->id }}">Release</button>
                             <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal{{ $doc->id }}">Cancel</button>
                         @elseif($doc->status_id == 4)
-                            <span class="text-muted small">{{ $doc->date_acted ? \Carbon\Carbon::parse($doc->date_acted)->format('M d, Y h:i A') : '' }}</span>
+                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#reEntryModal{{ $doc->id }}">Re-entry</button>
+                            <span class="text-muted small d-block mt-1">{{ $doc->date_acted ? \Carbon\Carbon::parse($doc->date_acted)->format('M d, Y h:i A') : '' }}</span>
                         @else
                             <span class="text-muted small">Re-entered</span>
                         @endif
@@ -153,6 +154,45 @@
                         <div class="d-flex align-items-center justify-content-center gap-3 mt-24">
                             <button type="button" class="btn btn-secondary px-40 py-11" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-danger px-48 py-12">Confirm Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if($doc->status_id == 4)
+    <div class="modal fade" id="reEntryModal{{ $doc->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content radius-16 bg-base">
+                <div class="modal-header py-16 px-24 border border-top-0 border-start-0 border-end-0">
+                    <h6 class="modal-title">Re-entry Document: {{ $doc->document->tracking_code }}</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-24">
+                    <form action="{{ route('dts.my-pigeonhole.re-entry') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="doc_route_id" value="{{ $doc->id }}">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Tracking Code</label>
+                            <input type="text" class="form-control" value="{{ $doc->document->tracking_code }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Description</label>
+                            <input type="text" class="form-control" value="{{ $doc->docType->description ?? '' }} - {{ $doc->document->description }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Will be sent back to Records Section</label>
+                            <input type="text" class="form-control" value="{{ $doc->fromSection->name ?? 'Records Section' }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Re-entry Remarks</label>
+                            <input type="text" class="form-control" name="reentry_remarks" placeholder="e.g. Corrections needed, document returned">
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center gap-3 mt-24">
+                            <button type="button" class="btn btn-secondary px-40 py-11" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-warning px-48 py-12">Confirm Re-entry</button>
                         </div>
                     </form>
                 </div>
