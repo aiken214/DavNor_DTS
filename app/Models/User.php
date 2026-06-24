@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'office_id',
         'section_id',
+        'pigeonhole_id',
         'password',
     ];
 
@@ -65,5 +66,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(DtsSection::class, 'section_user', 'user_id', 'section_id');
     }
-    
+
+    public function pigeonhole()
+    {
+        return $this->belongsTo(DtsPigeonhole::class, 'pigeonhole_id');
+    }
 }

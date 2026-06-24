@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\DtsPigeonhole;
 use App\Models\DtsSection;
 use App\Models\User;
 use App\Models\Role;
@@ -72,8 +73,9 @@ class UserController extends Controller
         
         $sections = DtsSection::orderBy('name')->where('id','>',1)->get(); //excluding section ID 1 it belongs the GUest Section
         $roles= Role::orderBy('title')->get();
+        $pigeonholes = DtsPigeonhole::where('is_active', true)->orderBy('name')->get();
 
-       return view('admin.users.create' , compact('sections', 'mySection', 'myAllSections', 'roles', 'systemSetting'));
+       return view('admin.users.create' , compact('sections', 'mySection', 'myAllSections', 'roles', 'systemSetting', 'pigeonholes'));
     }
 
     /**
@@ -92,6 +94,7 @@ class UserController extends Controller
             'roles.*' => 'nullable|exists:roles,id',
             'sections' => 'nullable|array',
             'sections.*' => 'nullable|exists:dts_sections,id',
+            'pigeonhole_id' => 'nullable|exists:dts_pigeonholes,id',
         ]);
 
         $user = new User();
@@ -99,6 +102,7 @@ class UserController extends Controller
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
         $user->section_id = $request->input('section_id');
+        $user->pigeonhole_id = $request->input('pigeonhole_id') ?: null;
         $user->save();
 
         // Assign roles to the user
@@ -139,7 +143,8 @@ class UserController extends Controller
         $userSections = $user->sections->pluck('id')->toArray(); // Get the sections assigned to the user
         $userRoles = $user->roles->pluck('id')->toArray(); // Get the roles assigned to the user
         $roles= Role::orderBy('title')->get();
-        return view('admin.users.edit', compact('user', 'sections', 'userSections', 'mySection', 'myAllSections', 'roles', 'userRoles', 'systemSetting'));
+        $pigeonholes = DtsPigeonhole::where('is_active', true)->orderBy('name')->get();
+        return view('admin.users.edit', compact('user', 'sections', 'userSections', 'mySection', 'myAllSections', 'roles', 'userRoles', 'systemSetting', 'pigeonholes'));
       
     }
 
@@ -159,6 +164,7 @@ class UserController extends Controller
             'roles.*' => 'nullable|exists:roles,id',
             'sections' => 'nullable|array',
             'sections.*' => 'nullable|exists:dts_sections,id',
+            'pigeonhole_id' => 'nullable|exists:dts_pigeonholes,id',
         ]);
 
         if($request->section_id == ""){
@@ -170,6 +176,7 @@ class UserController extends Controller
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->section_id = $section_id;
+        $user->pigeonhole_id = $request->input('pigeonhole_id') ?: null;
         if ($request->filled('password')) {
             $user->password = Hash::make($request->input('password'));
         }
