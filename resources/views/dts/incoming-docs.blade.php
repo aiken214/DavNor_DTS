@@ -72,7 +72,7 @@
             <table  id="mydataTable" class="table table-striped">
             <thead>
                 <tr>
-                    <th style="display: none;"Tracking Code</th>
+                    <th>Tracking Code</th>
                     <th>Particulars</th>
                     <th>From</th>                  
                     <th>Date Forwarded</th>
