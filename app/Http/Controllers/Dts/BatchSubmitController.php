@@ -153,7 +153,10 @@ class BatchSubmitController extends Controller
                 $document->from_section_id = Auth::user()->section_id;
                 $document->save();
 
-                $recordsSection = DtsSection::where('is_record_management', 1)->first();
+                $recordsSection = DtsSection::where('is_record_management', 1)
+                    ->where('name', 'like', '%Records%')
+                    ->first()
+                    ?? DtsSection::where('is_record_management', 1)->orderBy('id')->first();
 
                 $docRoute = new DtsDocRoute();
                 $docRoute->dts_document_id = $document->id;
