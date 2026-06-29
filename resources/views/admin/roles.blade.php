@@ -58,8 +58,8 @@
     <div class="card-body">
         <table id="dataTable" class="table table-striped">
             <thead>
-                <tr>
-                    <th style="display: none;">ID</th>
+                <tr> 
+                    <th style="text-align: left; width:5%;">ID</th>
                     <th style="width:15%;"> Role </th>
                     <th>Permissions</th>
                     <th style="width:15%;">Action</th>
@@ -68,7 +68,7 @@
             <tbody>
                 @foreach($roles as $role)
                     <tr>
-                        <td>{{ $role->id }}</td>
+                        <td style="text-align: left;">{{ $role->id }}</td>
                         <td>{{ $role->title }}</td>
                         <td>
                             @foreach($role->permissions as $key => $permission)

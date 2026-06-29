@@ -58,7 +58,7 @@
         <table id="permissionsTable" class="table table-striped">
             <thead>
                 <tr>
-                    <th style="display: none;">ID</th>
+                    <th style="width:5%; text-align: left;">ID</th>
                     <th>Permission Title</th>
                     <th>Remarks</th>
                     <th>Assigned To Roles</th>
@@ -68,7 +68,7 @@
             <tbody>
                 @foreach($permissions as $permission)
                     <tr>
-                        <td>{{ $permission->id }}</td>
+                        <td style="text-align: left;">{{ $permission->id }}</td>
                         <td><span class="badge bg-success">{{ $permission->title }}</span></td>
                         <td>{{ $permission->remarks ?? '-' }}</td>
                         <td>
