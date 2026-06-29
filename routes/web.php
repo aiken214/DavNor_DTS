@@ -31,6 +31,7 @@ use App\Http\Controllers\Dts\KeptDocumentController;
 use App\Http\Controllers\Dts\PigeonholeDocController;
 use App\Http\Controllers\Dts\MyPigeonholeController;
 use App\Http\Controllers\Dts\BatchSubmitController;
+use App\Http\Controllers\Dts\BatchReceivedController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -166,6 +167,12 @@ Route::group(['prefix' => 'dts', 'as' => 'dts.', 'namespace' => 'Dts', 'middlewa
     Route::post('/batch-submits-remove-doc', [BatchSubmitController::class, 'removeDocument'])->name('batch-submits-remove-doc');
     Route::post('/batch-submits-finalize', [BatchSubmitController::class, 'finalize'])->name('batch-submits-finalize');
     Route::get('/batch-submits-for-print-view/{batchSubmitId}', [BatchSubmitController::class, 'forPrintView'])->name('batch-submits-for-print-view');
+
+    Route::get('/batch-received', [BatchReceivedController::class, 'index'])->name('batch-received.index');
+    Route::get('/batch-received-show/{dtsBatchSubmit}', [BatchReceivedController::class, 'show'])->name('batch-received.show');
+    Route::post('/batch-received-delete-doc', [BatchReceivedController::class, 'deleteDocument'])->name('batch-received.delete-doc');
+    Route::post('/batch-received-reroute-doc', [BatchReceivedController::class, 'rerouteDocument'])->name('batch-received.reroute-doc');
+    Route::post('/batch-received-forward-batch', [BatchReceivedController::class, 'forwardBatch'])->name('batch-received.forward-batch');
 
     Route::get('/system-settings', [SystemSettingController::class, 'index'])->name('system-settings.index');
     Route::get('/system-settings/{dtsSystemSetting}/edit', [SystemSettingController::class, 'edit'])->name('system-settings.edit');

@@ -42,6 +42,8 @@ class RoleController extends Controller
 
             if (str_starts_with($title, 'dts_batch_submit')) {
                 $group = 'DTS Batch Submit';
+            } elseif (str_starts_with($title, 'dts_batch_received')) {
+                $group = 'DTS Batch Received';
             } elseif (str_starts_with($title, 'dts_batch_release')) {
                 $group = 'DTS Batch Release';
             } elseif (str_starts_with($title, 'dts_doctype')) {

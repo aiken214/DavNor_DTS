@@ -54,6 +54,7 @@
                     <th>Code</th>
                     <th>Name</th>
                     <th class="description-column">Description</th>
+                    <th>Destination</th>
                     <th>Created</th>
                     <th>Status</th>
                     <th>Actions</th>
@@ -65,6 +66,7 @@
                     <td>{{ $batch->batch_code }}</td>
                     <td>{{ $batch->name }}</td>
                     <td>{{ $batch->description }}</td>
+                    <td>{{ $batch->forSection->name ?? 'N/A' }}</td>
                     <td>
                         {{ $batch->createdBy->name }}<br>
                         <small>@dateDateTime($batch->created_at)</small>
@@ -111,6 +113,15 @@
                     <div class="mb-3">
                         <label for="batchDescription" class="form-label">Description</label>
                         <textarea class="form-control" id="batchDescription" name="description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="batchForSection" class="form-label">Destination Section</label>
+                        <select class="form-control" id="batchForSection" name="for_section_id" required>
+                            <option value="">-- Select Destination --</option>
+                            @foreach($sections as $section)
+                                <option value="{{ $section->id }}">{{ $section->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

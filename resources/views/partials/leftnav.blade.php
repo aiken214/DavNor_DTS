@@ -120,6 +120,14 @@
     </a>
   </li>
   @endcan
+  @can('dts_batch_received_access')
+  <li class="li-forbadge">
+    <a href="{{ route('dts.batch-received.index') }}">
+      <iconify-icon icon="mdi:package-variant-closed-check" class="menu-icon"></iconify-icon>
+      <span>Batch Received</span>
+    </a>
+  </li>
+  @endcan
 
   <li class="dropdown {{ request()->routeIs('dts.my-documents', 'dts.routed-for-me', 'dts.accepted-by-me', 'dts.stats-per-section') ? 'open' : '' }}">
     <a href="javascript:void(0)">

@@ -16,6 +16,7 @@ class DtsBatchSubmit extends Model
         'batch_code',
         'createdby_id',
         'section_id',
+        'for_section_id',
         'submittedby_id',
         'submit_date',
     ];
@@ -33,6 +34,11 @@ class DtsBatchSubmit extends Model
     public function section()
     {
         return $this->belongsTo(DtsSection::class);
+    }
+
+    public function forSection()
+    {
+        return $this->belongsTo(DtsSection::class, 'for_section_id');
     }
 
     public function createdBy()
