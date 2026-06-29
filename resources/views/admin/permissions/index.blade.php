@@ -58,11 +58,7 @@
         <table id="permissionsTable" class="table table-striped">
             <thead>
                 <tr>
-<<<<<<< HEAD
-                    <th>ID</th>
-=======
                     <th style="width:5%; text-align: left;">ID</th>
->>>>>>> 5d61f9b75919e98aee44ff89bf6313548f0395ea
                     <th>Permission Title</th>
                     <th>Remarks</th>
                     <th>Assigned To Roles</th>
