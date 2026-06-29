@@ -47,7 +47,12 @@ class IncomingDocController extends Controller
 
         $pigeonholes = DtsPigeonhole::with('section')->where('is_active', true)->orderBy('name')->get();
 
-      return view("dts.incoming-docs", compact('tableTitle', 'mySection', 'documents', 'myAllSections', 'systemSetting', 'pigeonholes'));
+        $forwardSections = DtsSection::where('id', '!=', Auth::user()->section_id)
+            ->where('id', '>', 1)
+            ->orderBy('name')
+            ->get();
+
+      return view("dts.incoming-docs", compact('tableTitle', 'mySection', 'documents', 'myAllSections', 'systemSetting', 'pigeonholes', 'forwardSections'));
     }
 
 
@@ -170,7 +175,45 @@ class IncomingDocController extends Controller
             return redirect()->route('dts.incoming-docs.index')->with('error', 'An error occurred while accepting the document');
         }
     }
-   
-   
-    
+
+    public function forwardDoc(Request $request)
+    {
+        $validated = $request->validate([
+            'doc_route_id' => 'required',
+            'document_id' => 'required',
+            'forward_section_id' => 'required|exists:dts_sections,id',
+            'forward_remarks' => 'nullable|string',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $docRoute = DtsDocRoute::findOrFail($validated['doc_route_id']);
+            $docRoute->date_accepted = now();
+            $docRoute->receiver_user_id = Auth::id();
+            $docRoute->status_id = 6;
+            $docRoute->date_acted = now();
+            $docRoute->end_remarks = 'Forwarded to ' . DtsSection::find($validated['forward_section_id'])->name . ($validated['forward_remarks'] ? ' | ' . $validated['forward_remarks'] : '');
+            $docRoute->save();
+
+            $newRoute = new DtsDocRoute();
+            $newRoute->dts_document_id = $validated['document_id'];
+            $newRoute->previous_route_id = $docRoute->id;
+            $newRoute->from_user_id = Auth::id();
+            $newRoute->from_section_id = Auth::user()->section_id;
+            $newRoute->for_section_id = $validated['forward_section_id'];
+            $newRoute->route_purpose = $validated['forward_remarks'] ?? $docRoute->route_purpose;
+            $newRoute->date_forwarded = now();
+            $newRoute->status_id = 1;
+            $newRoute->save();
+
+            DB::commit();
+
+            return redirect()->route('dts.incoming-docs.index')->with('success', 'Document forwarded successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->route('dts.incoming-docs.index')->with('error', 'An error occurred while forwarding the document.');
+        }
+    }
 }

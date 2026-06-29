@@ -117,8 +117,20 @@
                                      data-adfdoc_id ="{{ $documentRoute->document->id }}"
                                      >
                                     Accept and File </a></li>
-                                  @if($pigeonholes->count() > 0)
                                   <li><hr class="dropdown-divider"></li>
+                                  <li>
+                                    <a class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900" href="javascript:void(0)"
+                                    data-bs-toggle="modal" data-bs-target="#forwardDocModal"
+                                    data-fwdrouteid="{{ $documentRoute->id }}"
+                                    data-fwddetails="{{ $documentRoute->docType->description }} - {{ $documentRoute->document->description }}"
+                                    data-fwdfrom="{{ $documentRoute->fromSection->name }} | {{ $documentRoute->fromUser->name }}"
+                                    data-fwddoc_id="{{ $documentRoute->document->id }}"
+                                    data-fwdpurpose="{{ $documentRoute->route_purpose }}"
+                                    data-fwdintended="{{ $documentRoute->intended_section_id }}"
+                                    >
+                                    Forward</a>
+                                  </li>
+                                  @if($pigeonholes->count() > 0)
                                   <li>
                                     <a class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900" href="javascript:void(0)"
                                     data-bs-toggle="modal" data-bs-target="#sendToPigeonholeModal"
@@ -265,6 +277,63 @@
   </div>
 <!--//AcceptFile Modal -->
 
+<!--Forward Document Modal -->
+<div class="modal fade" id="forwardDocModal" tabindex="-1" aria-labelledby="forwardDocModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form action="{{ route('dts.incoming-docs.forward-doc') }}" method="post">
+            @csrf
+        <div class="modal-header">
+          <h6 class="modal-title fs-5" id="forwardDocModalLabel">Forward Document</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3 row">
+                <div class="col-sm-3">Description</div>
+                <div class="col-sm-9 align-self-center" id="fwdDocDesc"></div>
+            </div>
+            <div class="mb-3 row">
+                <div class="col-sm-3">From</div>
+                <input type="hidden" name="doc_route_id" id="fwdDocRouteId">
+                <input type="hidden" name="document_id" id="fwdDocId">
+                <div class="col-sm-9" id="fwdDocFrom"></div>
+            </div>
+            <div class="mb-3 row">
+                <div class="col-sm-3">Original Purpose</div>
+                <div class="col-sm-9" id="fwdDocPurpose"></div>
+            </div>
+            <div class="mb-3 row">
+                <label for="forward_section_id" class="col-sm-3 col-form-label">Forward to Section</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="forward_section_id" name="forward_section_id" required>
+                        <option value="">-- Select Section --</option>
+                        @foreach($forwardSections as $section)
+                            <option value="{{ $section->id }}">{{ $section->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="forward_remarks" class="col-sm-3 col-form-label">Remarks (optional)</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" name="forward_remarks" id="forward_remarks">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <div class="col-sm-3">Forwarded By</div>
+                <div class="col-sm-9">{{ Auth::user()->name }}</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-warning">Forward</button>
+        </div>
+    </form>
+      </div>
+    </div>
+</div>
+<!--//Forward Document Modal -->
+
 @if($pigeonholes->count() > 0)
 <!--Send to Pigeonhole Modal -->
 <div class="modal fade" id="sendToPigeonholeModal" tabindex="-1" aria-labelledby="sendToPigeonholeModalLabel" aria-hidden="true">
@@ -388,6 +457,22 @@ $('#sendToPigeonholeModal').on('show.bs.modal', function (event) {
     modal.find('#phDocDesc').text(button.data('phdetails'));
     modal.find('#phDocFrom').text(button.data('phfrom'));
     modal.find('#phDocId').val(button.data('phdoc_id'));
+});
+
+$('#forwardDocModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var modal = $(this);
+    modal.find('#fwdDocRouteId').val(button.data('fwdrouteid'));
+    modal.find('#fwdDocDesc').text(button.data('fwddetails'));
+    modal.find('#fwdDocFrom').text(button.data('fwdfrom'));
+    modal.find('#fwdDocId').val(button.data('fwddoc_id'));
+    modal.find('#fwdDocPurpose').text(button.data('fwdpurpose'));
+    var intended = button.data('fwdintended');
+    if (intended) {
+        modal.find('#forward_section_id').val(intended);
+    } else {
+        modal.find('#forward_section_id').val('');
+    }
 });
 
 $('#acceptDocFileModal').on('show.bs.modal', function (event) {
