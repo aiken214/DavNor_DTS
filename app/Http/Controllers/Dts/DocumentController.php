@@ -148,7 +148,7 @@ public function store(Request $request)
         'fromuser_id' => 'required',
         'from_section_id' => 'required',
         'to_section_id' => 'required',
-        'to_user_id' => 'required',
+        'to_user_id' => 'nullable',
     ]);
     try {
         // Start transaction
@@ -172,8 +172,26 @@ public function store(Request $request)
         $document->save();
         $fromUserId = Auth::user()->id;
         $fromSectionId = Auth::user()->section_id;
-        // Insert forward route
-        $routeId = $this->insertForwardRoute($document->id, $request->input('to_section_id'), $request->input('to_user_id'),$request->input('actions_needed'), $fromUserId, $fromSectionId);
+        $isSchoolUser = Auth::user()->roles->contains('id', 5);
+
+        if ($isSchoolUser) {
+            $recordsSection = DtsSection::where('is_record_management', 1)
+                ->where('id', '!=', $fromSectionId)
+                ->first();
+            $intendedSectionId = $request->input('to_section_id');
+            $intendedSectionName = DtsSection::find($intendedSectionId)->name;
+            $routeId = $this->insertForwardRoute(
+                $document->id,
+                $recordsSection->id,
+                null,
+                $request->input('actions_needed') . ' | Intended for: ' . $intendedSectionName,
+                $fromUserId,
+                $fromSectionId,
+                $intendedSectionId
+            );
+        } else {
+            $routeId = $this->insertForwardRoute($document->id, $request->input('to_section_id'), $request->input('to_user_id'),$request->input('actions_needed'), $fromUserId, $fromSectionId);
+        }
 
         // Commit transaction
         DB::commit();
@@ -187,9 +205,8 @@ public function store(Request $request)
     }
 }
 
-private function insertForwardRoute($documentId, $forSectionId, $forUserId, $actions_needed, $fromUserId, $fromSectionId ) //for first route
+private function insertForwardRoute($documentId, $forSectionId, $forUserId, $actions_needed, $fromUserId, $fromSectionId, $intendedSectionId = null)
 {
-   
     $docRoute = new DtsDocRoute();
     $docRoute->dts_document_id = $documentId;
     $docRoute->for_section_id = $forSectionId;
@@ -199,7 +216,8 @@ private function insertForwardRoute($documentId, $forSectionId, $forUserId, $act
     $docRoute->from_section_id = $fromSectionId;
     $docRoute->date_forwarded = date('Y-m-d H:i:s');
     $docRoute->status_id = 1;
-    $docRoute->save();   
+    $docRoute->intended_section_id = $intendedSectionId;
+    $docRoute->save();
     return $docRoute->id;
 }
 

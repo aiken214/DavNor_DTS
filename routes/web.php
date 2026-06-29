@@ -130,6 +130,7 @@ Route::group(['prefix' => 'dts', 'as' => 'dts.', 'namespace' => 'Dts', 'middlewa
     Route::post('/incoming-docs/accept', [IncomingDocController::class, 'acceptDoc'])->name('incomingdoc-accept');
     Route::post('/incoming-docs/accept-andfile', [IncomingDocController::class, 'acceptAndFileDoc'])->name('incomingdoc-accept-andfile');
     Route::post('/incoming-docs/send-to-pigeonhole', [IncomingDocController::class, 'sendToPigeonhole'])->name('incoming-docs.send-to-pigeonhole');
+    Route::post('/incoming-docs/forward-doc', [IncomingDocController::class, 'forwardDoc'])->name('incoming-docs.forward-doc');
    
 
     //QR COde search/receipt

@@ -172,6 +172,7 @@ class BatchSubmitController extends Controller
                 $docRoute->route_purpose = $request->input('actions_needed');
                 $docRoute->date_forwarded = now();
                 $docRoute->status_id = 1;
+                $docRoute->intended_section_id = $batch->for_section_id;
                 $docRoute->save();
 
                 DB::table('dts_batch_submit_doc_route')->insert([
