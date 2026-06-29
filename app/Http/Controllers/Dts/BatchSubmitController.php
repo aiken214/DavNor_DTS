@@ -34,14 +34,18 @@ class BatchSubmitController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        $batchSubmits = DtsBatchSubmit::with('createdBy', 'submittedBy')
+        $batchSubmits = DtsBatchSubmit::with('createdBy', 'submittedBy', 'forSection')
             ->where('createdby_id', Auth::id())
             ->orderByRaw('submittedby_id IS NULL DESC')
             ->orderBy('id', 'desc')
             ->limit(500)
             ->get();
 
-        return view('dts.batch-submit-list', compact('batchSubmits', 'mySection', 'myAllSections', 'systemSetting'));
+        $sections = DtsSection::where('id', '!=', Auth::user()->section_id)
+            ->orderBy('name')
+            ->get();
+
+        return view('dts.batch-submit-list', compact('batchSubmits', 'mySection', 'myAllSections', 'systemSetting', 'sections'));
     }
 
     public function store(Request $request)
@@ -51,11 +55,13 @@ class BatchSubmitController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'for_section_id' => 'required|exists:dts_sections,id',
         ]);
 
         DtsBatchSubmit::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'for_section_id' => $request->input('for_section_id'),
             'createdby_id' => Auth::id(),
             'section_id' => Auth::user()->section_id,
         ]);
@@ -97,7 +103,7 @@ class BatchSubmitController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        $batchSubmit = DtsBatchSubmit::with('createdBy', 'submittedBy')->findOrFail($batchSubmitId);
+        $batchSubmit = DtsBatchSubmit::with('createdBy', 'submittedBy', 'forSection')->findOrFail($batchSubmitId);
 
         $batchDocuments = DB::table('dts_batch_submit_doc_route')
             ->join('dts_doc_routes', 'dts_doc_routes.id', '=', 'dts_batch_submit_doc_route.doc_route_id')
@@ -112,6 +118,7 @@ class BatchSubmitController extends Controller
                 'dts_doc_types.description as type_description'
             )
             ->where('dts_batch_submit_doc_route.batch_submit_id', $batchSubmitId)
+            ->whereNull('dts_doc_routes.deleted_at')
             ->get();
 
         $docTypes = DtsDocType::orderBy('description', 'asc')->get();
@@ -254,7 +261,7 @@ class BatchSubmitController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        $batchSubmit = DtsBatchSubmit::with('createdBy', 'submittedBy')->findOrFail($batchSubmitId);
+        $batchSubmit = DtsBatchSubmit::with('createdBy', 'submittedBy', 'forSection')->findOrFail($batchSubmitId);
 
         $batchDocuments = DB::table('dts_batch_submit_doc_route')
             ->join('dts_doc_routes', 'dts_doc_routes.id', '=', 'dts_batch_submit_doc_route.doc_route_id')

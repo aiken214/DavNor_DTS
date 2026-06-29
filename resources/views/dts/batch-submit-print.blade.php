@@ -41,6 +41,7 @@
                 @if($batchSubmit->description)
                 <div>Description: {{ $batchSubmit->description }}</div>
                 @endif
+                <div>Destination: {{ $batchSubmit->forSection->name ?? 'N/A' }}</div>
                 <div style="margin-bottom: 10px;">Submit Date: {{ $batchSubmit->submit_date ?? 'Draft' }}</div>
 
                 <table class="table">

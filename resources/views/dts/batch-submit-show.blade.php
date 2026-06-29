@@ -47,7 +47,8 @@
     <div class="card-body">
         <div class="row">
             <div class="col-sm-8">
-                <strong>{{ $batchSubmit->batch_code }}</strong> | Name: {{ $batchSubmit->name }} | Description: {{ $batchSubmit->description }}
+                <strong>{{ $batchSubmit->batch_code }}</strong> | Name: {{ $batchSubmit->name }} | Description: {{ $batchSubmit->description }}<br>
+                <small>Destination: <strong>{{ $batchSubmit->forSection->name ?? 'N/A' }}</strong></small>
             </div>
             <div class="col-sm-4 text-end">
                 @if($batchSubmit->submittedby_id == NULL)
