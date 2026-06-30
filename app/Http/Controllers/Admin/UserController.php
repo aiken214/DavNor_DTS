@@ -87,7 +87,7 @@ class UserController extends Controller
 
        $validated= $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',
             'password' => 'required|string|min:8',
             'section_id' => 'nullable|exists:dts_sections,id',
             'roles' => 'nullable|array',
@@ -100,7 +100,7 @@ class UserController extends Controller
         $user = new User();
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        $user->password = Hash::make($request->input('password'));
+        $user->password = $request->input('password');
         $user->section_id = $request->input('section_id');
         $user->pigeonhole_id = $request->input('pigeonhole_id') ?: null;
         $user->save();
@@ -178,7 +178,7 @@ class UserController extends Controller
         $user->section_id = $section_id;
         $user->pigeonhole_id = $request->input('pigeonhole_id') ?: null;
         if ($request->filled('password')) {
-            $user->password = Hash::make($request->input('password'));
+            $user->password = $request->input('password');
         }
         $user->save();
         // Sync roles

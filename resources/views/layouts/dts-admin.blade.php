@@ -184,8 +184,13 @@
         cursor: pointer;
     }    
 
+  .dashboard-main-body .card-body {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+  }
+
   </style>
-  
+
   @yield('styles')
 </head>
   <body>
