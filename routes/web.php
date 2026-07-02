@@ -32,6 +32,7 @@ use App\Http\Controllers\Dts\PigeonholeDocController;
 use App\Http\Controllers\Dts\MyPigeonholeController;
 use App\Http\Controllers\Dts\BatchSubmitController;
 use App\Http\Controllers\Dts\BatchReceivedController;
+use App\Http\Controllers\Dts\QueueController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,14 @@ Route::get('/', function () {
 // Route::get('/sign-in', function () {
 //     return view('sign-in');
 // })->name('login');
+
+// Public Queue routes (no auth required)
+Route::get('/queue/client', [QueueController::class, 'clientPage'])->name('queue.client');
+Route::get('/queue/display', [QueueController::class, 'displayPage'])->name('queue.display');
+Route::get('/queue/api/status', [QueueController::class, 'status'])->name('queue.api.status');
+Route::post('/queue/api/join', [QueueController::class, 'joinQueue'])->name('queue.api.join');
+Route::get('/queue/api/ticket-status', [QueueController::class, 'ticketStatus'])->name('queue.api.ticket-status');
+Route::post('/queue/api/save-subscription', [QueueController::class, 'saveSubscription'])->name('queue.api.save-subscription');
 
 Route::get('/guest-dts', [GuestDtsController::class, 'createGuestDocument'])->name('guest-dts');
 Route::get('/user-by-section/{sectionId}', [GuestDtsController::class, 'getUserBySecId'])->middleware('throttle:30,1');
@@ -236,7 +245,15 @@ Route::group(['prefix' => 'dts', 'as' => 'dts.', 'namespace' => 'Dts', 'middlewa
     Route::get('/deffered-parked', [ParkedRoutesController::class, 'deferredParked'])->name('deffered-parked');
     //kept documents
     Route::get('/kept-documents', [KeptDocumentController::class, 'receivedKept'])->name('kept-documents');
-    
+
+    // Queue Management (authenticated)
+    Route::get('/queue', [QueueController::class, 'index'])->name('queue.index');
+    Route::post('/queue/generate', [QueueController::class, 'generateNewQueue'])->name('queue.generate');
+    Route::post('/queue/call-next', [QueueController::class, 'callNext'])->name('queue.call-next');
+    Route::post('/queue/recall', [QueueController::class, 'recall'])->name('queue.recall');
+    Route::post('/queue/complete', [QueueController::class, 'complete'])->name('queue.complete');
+    Route::post('/queue/toggle-break', [QueueController::class, 'toggleBreak'])->name('queue.toggle-break');
+
 });
 
 require __DIR__.'/auth.php';

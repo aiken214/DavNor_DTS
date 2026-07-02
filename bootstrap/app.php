@@ -15,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'auth_gates' => \App\Http\Middleware\AuthGates::class,
         ]);
+        $middleware->validateCsrfTokens(except: [
+            'queue/api/join',
+            'queue/api/save-subscription',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

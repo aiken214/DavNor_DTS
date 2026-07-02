@@ -128,6 +128,14 @@
     </a>
   </li>
   @endcan
+  @can('dts_queue_access')
+  <li class="li-forbadge">
+    <a href="{{ route('dts.queue.index') }}">
+      <iconify-icon icon="mdi:ticket-outline" class="menu-icon"></iconify-icon>
+      <span>Queue Management</span>
+    </a>
+  </li>
+  @endcan
 
   <li class="dropdown {{ request()->routeIs('dts.my-documents', 'dts.routed-for-me', 'dts.accepted-by-me', 'dts.stats-per-section') ? 'open' : '' }}">
     <a href="javascript:void(0)">
